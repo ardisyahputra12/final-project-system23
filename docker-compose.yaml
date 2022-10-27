@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+  flask-app:
+    container_name: system23
+    build: .
+    ports:
+      - 5000:5000
+    networks:
+      - system23-network
+    depends_on:
+      - db
+    env_file: .env
+    restart: always
+  db:
+    container_name: system23-db
+    image: postgres:14
+    ports:
+      - 5432:5432
+    networks:
+      - system23-network
+    env_file: .env
+    restart: always
+networks:
+  system23-network:
+    driver: bridge
+    name: system23-network
