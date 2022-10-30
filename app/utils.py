@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from sqlalchemy import (
     Column,
     Integer,
@@ -32,6 +33,33 @@ def create_table():
         Column("password", String, nullable=False),
         Column("balance", String, nullable=False, server_default="0"),
         Column("token", String, nullable=True, unique=True),
+    )
+    Table(
+        "products",
+        meta,
+        Column("product_id", String, nullable=False, unique=True),
+        Column("category_id", String, nullable=False, unique=True),
+        Column("product_name", String, nullable=False, server_default="None"),
+        Column("product_price", Integer, nullable=False, server_default="0"),
+        Column("product_detail", String, nullable=False, server_default="None"),
+        Column("product_size", String, nullable=False, server_default="['S', 'M', 'L']"),
+        Column("product_condition", String, nullable=False, server_default="deleted"),          # product_condition == new/used/deleted
+        Column("product_image", String, nullable=False, server_default="None"),
+        Column("product_images_url", String, nullable=False, server_default="None"),
+        Column("create_at", String, nullable=False, server_default="None"),
+        Column("create_by", String, nullable=False, server_default="None"),
+        Column("update_at", String, nullable=True, server_default="None"),
+        Column("update_by", String, nullable=True, server_default="None"),
+    )
+    Table(
+        "categories",
+        meta,
+        Column("category_id", String, nullable=False, unique=True),
+        Column("category_name", String, nullable=False, server_default="None"),
+        Column("create_at", String, nullable=False, server_default="None"),
+        Column("create_by", String, nullable=False, server_default="None"),
+        Column("update_at", String, nullable=True, server_default="None"),
+        Column("update_by", String, nullable=True, server_default="None"),
     )
     meta.create_all(engine)
 
