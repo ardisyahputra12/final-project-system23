@@ -6,6 +6,7 @@ from sqlalchemy import (
     MetaData,
     String,
     Table,
+    ForeignKey,
     create_engine,
     text
 )
@@ -35,10 +36,20 @@ def create_table():
         Column("token", String, nullable=True, unique=True),
     )
     Table(
+        "categories",
+        meta,
+        Column("category_id", String, nullable=False, unique=True),
+        Column("category_name", String, nullable=False, server_default="None"),
+        Column("create_at", String, nullable=False, server_default="None"),
+        Column("create_by", String, nullable=False, server_default="None"),
+        Column("update_at", String, nullable=True, server_default="None"),
+        Column("update_by", String, nullable=True, server_default="None"),
+    )
+    Table(
         "products",
         meta,
         Column("product_id", String, nullable=False, unique=True),
-        Column("category_id", String, nullable=False, unique=True),
+        Column("category_id", String, ForeignKey('categories.category_id', ondelete='CASCADE', onupdate='CASCADE',), nullable=False),
         Column("product_name", String, nullable=False, server_default="None"),
         Column("product_price", Integer, nullable=False, server_default="0"),
         Column("product_detail", String, nullable=False, server_default="None"),
@@ -46,16 +57,6 @@ def create_table():
         Column("product_condition", String, nullable=False, server_default="deleted"),          # product_condition == new/used/deleted
         Column("product_image", String, nullable=False, server_default="None"),
         Column("product_images_url", String, nullable=False, server_default="None"),
-        Column("create_at", String, nullable=False, server_default="None"),
-        Column("create_by", String, nullable=False, server_default="None"),
-        Column("update_at", String, nullable=True, server_default="None"),
-        Column("update_by", String, nullable=True, server_default="None"),
-    )
-    Table(
-        "categories",
-        meta,
-        Column("category_id", String, nullable=False, unique=True),
-        Column("category_name", String, nullable=False, server_default="None"),
         Column("create_at", String, nullable=False, server_default="None"),
         Column("create_by", String, nullable=False, server_default="None"),
         Column("update_at", String, nullable=True, server_default="None"),
