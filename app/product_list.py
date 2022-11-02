@@ -1,4 +1,5 @@
 from utils import run_query, error_message, success_message
+from blueprints import products_bp, categories_bp
 from datetime import datetime
 from flask import Blueprint, request
 from sqlalchemy import (
@@ -9,8 +10,8 @@ from sqlalchemy import (
     select,
 )
 
-products_bp = Blueprint("products", __name__, url_prefix="/products")
-categories_bp = Blueprint("categories", __name__, url_prefix="/categories")
+# products_bp = Blueprint("products", __name__, url_prefix="/products")
+# categories_bp = Blueprint("categories", __name__, url_prefix="/categories")
 
 
 @products_bp.route("", methods=["GET"])

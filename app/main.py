@@ -1,9 +1,10 @@
 from flask import Flask
 from utils import create_table
+from blueprints import products_bp, categories_bp
 from universal import universal_bp
 from home import home_bp
 from authentication import sign_up_bp, sign_in_bp
-from product_list import products_bp, categories_bp
+# from product_list import products_bp, categories_bp
 from cart import cart_bp, shipping_price_bp
 from profile_page import user_bp, order_bp
 from admin_page import orders_bp, sales_bp
