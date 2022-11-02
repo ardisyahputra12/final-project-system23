@@ -14,4 +14,4 @@ universal_bp = Blueprint("universal", __name__, url_prefix="/image")
 @universal_bp.route("", methods=["GET"])
 def get_image():
     # Only for tes
-    return success_message("Tes Success", 200)
+    return success_message(200, msg="Tes Success")

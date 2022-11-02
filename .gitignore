@@ -1,9 +1,3 @@
 final-project-system23/
 *.pyc
 __pycache__/
-
-# SQLite
-*.db
-
-# files
-*.csv

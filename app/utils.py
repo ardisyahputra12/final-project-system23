@@ -76,10 +76,12 @@ def run_query(query, commit: bool = False):
         else:
             return [dict(row) for row in conn.execute(query)]
 
-def error_message(msg: str, sts: int):
+def error_message(sts: int, msg: str):
     return {"error": msg}, sts
 
-def success_message(msg: str, sts: int, tkn: str = None):
-    val = {"message": msg}
+def success_message(sts: int, data: str = None, msg: str = None, tkn: str = None, row: bool = False):
+    val = {"data": [data]}
     if tkn!=None: val["token"] = tkn
+    if row!=False: val["total_rows"]= len(data)
+    if msg!=None: return msg, sts
     return val, sts
