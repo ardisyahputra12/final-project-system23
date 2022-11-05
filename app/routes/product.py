@@ -34,10 +34,10 @@ def get_product_list():
 
     # For testing only
     run_query(f"DELETE FROM products", True)
-    run_query(f"INSERT INTO products VALUES ('pid1', 'cid1', 'p123', '100', 'lorem', 'S', 'used', 'image1', 'imagesss', '{datetime.now()}', 'admin')", True)
-    run_query(f"INSERT INTO products VALUES ('pid2', 'cid1', 'p123', '60', 'lorem', 'L', 'used', 'image2', 'imagesss', '{datetime.now()}', 'admin')", True)
-    run_query(f"INSERT INTO products VALUES ('pid3', 'cid1', 'p789', '110', 'lorem', 'M', 'used', 'image3', 'imagesss', '{datetime.now()}', 'admin')", True)
-    run_query(f"INSERT INTO products VALUES ('pid4', 'cid2', 'p789', '500', 'lorem', 'M', 'used', 'image1', 'imagesss', '{datetime.now()}', 'admin')", True)
+    run_query(f"INSERT INTO products VALUES ('pid1', 'cid1', 'p123', '100', 'lorem', 'S', 'used', 'image1', 'imagesss', '{format_datetime()}', 'admin')", True)
+    run_query(f"INSERT INTO products VALUES ('pid2', 'cid1', 'p123', '60', 'lorem', 'L', 'used', 'image2', 'imagesss', '{format_datetime()}', 'admin')", True)
+    run_query(f"INSERT INTO products VALUES ('pid3', 'cid1', 'p789', '110', 'lorem', 'M', 'used', 'image3', 'imagesss', '{format_datetime()}', 'admin')", True)
+    run_query(f"INSERT INTO products VALUES ('pid4', 'cid2', 'p789', '500', 'lorem', 'M', 'used', 'image1', 'imagesss', '{format_datetime()}', 'admin')", True)
     # http://127.0.0.1:5000/products?category=cid1&price=100&product_name=p123&condition=used&sort_by=price_a_z
 
     if category == None or price == None or product_name == None or condition == None:
@@ -50,10 +50,10 @@ def get_product_list():
         elif sort_by == "price_a_z" or sort_by == None: sort = 'ASC'
         else: return error_message(400, "Params sort_by unknown, please use price_z_a or price_a_z")
         query = run_query(
-                f"""SELECT product_id, product_image, product_name, product_price
+                f"""SELECT id, image, name, price
                     FROM products
-                    WHERE category_id='{category}' and product_price<={price} and product_name='{product_name}' and product_condition='{condition}'
-                    ORDER BY product_price {sort}
+                    WHERE category_id='{category}' and price<={price} and name='{product_name}' and condition='{condition}'
+                    ORDER BY price {sort}
                     LIMIT {page_size}
                 """
             )
@@ -73,16 +73,16 @@ def search_product_by_image():
     body = request.get_json()
     if "image" not in body: return error_message(400, "Can't search image, image is empty")
     image = body["image"]
-    query = run_query(f"SELECT DISTINCT category_id FROM products WHERE product_image='{image}'")
+    query = run_query(f"SELECT DISTINCT category_id FROM products WHERE image='{image}'")
     return success_message(200, key="result", data=query)
 
 @products_bp.route("/<id>", methods=["GET"])
 def get_product_details(id):
-    if [{"product_id": id}] == run_query(f"SELECT product_id FROM products WHERE product_id='{id}'"):
+    if [{"id": id}] == run_query(f"SELECT id FROM products WHERE id='{id}'"):
         query = run_query(
-                f"""SELECT product_id, product_name, product_size, product_detail, product_price, product_images_url
+                f"""SELECT id, name, size, detail, price, images_url
                     FROM products
-                    WHERE product_id='{id}'
+                    WHERE id='{id}'
                 """
             )
     else: return error_message(404, "Not Found")

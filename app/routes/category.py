@@ -24,12 +24,12 @@ def create_category():
 def get_category():
     # For testing only
     run_query(f"DELETE FROM categories", True)
-    run_query(f"INSERT INTO categories VALUES ('cid1', 'baju', '{datetime.now()}', 'admin')", True)
-    run_query(f"INSERT INTO categories VALUES ('cid2', 'celana', '{datetime.now()}', 'admin')", True)
-    run_query(f"INSERT INTO categories VALUES ('cid3', 'kaos', '{datetime.now()}', 'admin')", True)
+    run_query(f"INSERT INTO categories VALUES ('cid1', 'baju', '{format_datetime()}', 'admin')", True)
+    run_query(f"INSERT INTO categories VALUES ('cid2', 'celana', '{format_datetime()}', 'admin')", True)
+    run_query(f"INSERT INTO categories VALUES ('cid3', 'kaos', '{format_datetime()}', 'admin')", True)
     # http://127.0.0.1:5000/categories
 
-    query = run_query(f"SELECT category_id, category_name FROM categories")
+    query = run_query(f"SELECT id, name FROM categories")
     return success_message(200, query)
 
 @categories_bp.route("", methods=["PUT"])
