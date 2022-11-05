@@ -1,14 +1,19 @@
-from utils import run_query, error_message, success_message
-from flask import Blueprint, request
+import uuid
+from flask import request
 from sqlalchemy import (
-    MetaData,
-    Table,
+    update,
     delete,
     insert,
     select,
 )
-
-universal_bp = Blueprint("universal", __name__, url_prefix="/image")
+from utils import (
+    run_query,
+    error_message,
+    success_message,
+    format_datetime,
+)
+from models.product import Products
+from . import universal_bp
 
 
 @universal_bp.route("", methods=["GET"])

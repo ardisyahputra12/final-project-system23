@@ -1,16 +1,24 @@
-from utils import run_query, error_message, success_message
-from datetime import datetime
-from flask import Blueprint, request
+import uuid
+from flask import request
 from sqlalchemy import (
-    MetaData,
-    Table,
+    update,
     delete,
     insert,
     select,
 )
+from utils import (
+    run_query,
+    error_message,
+    success_message,
+    format_datetime,
+)
+from models.category import Categories
+from . import categories_bp
 
-categories_bp = Blueprint("categories", __name__, url_prefix="/categories")
 
+@categories_bp.route("", methods=["POST"])
+def create_category():
+    pass
 
 @categories_bp.route("", methods=["GET"])
 def get_category():
@@ -23,10 +31,6 @@ def get_category():
 
     query = run_query(f"SELECT category_id, category_name FROM categories")
     return success_message(200, query)
-
-@categories_bp.route("", methods=["POST"])
-def create_category():
-    pass
 
 @categories_bp.route("", methods=["PUT"])
 def update_category():

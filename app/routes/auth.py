@@ -1,15 +1,19 @@
-from utils import run_query, error_message, success_message
-from flask import Blueprint, request
+import uuid
+from flask import request
 from sqlalchemy import (
-    MetaData,
-    Table,
+    update,
     delete,
     insert,
     select,
 )
-
-sign_up_bp = Blueprint("sign_up", __name__, url_prefix="/sign-up")
-sign_in_bp = Blueprint("sign_in", __name__, url_prefix="/sign-in")
+from utils import (
+    run_query,
+    error_message,
+    success_message,
+    format_datetime,
+)
+from models.user import Users
+from . import sign_up_bp, sign_in_bp
 
 
 @sign_up_bp.route("", methods=["POST"])
