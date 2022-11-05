@@ -1,23 +1,28 @@
-from utils import run_query, error_message, success_message
-from datetime import datetime
-from flask import Blueprint, request
+import uuid
+from flask import request
 from sqlalchemy import (
-    MetaData,
-    Table,
+    update,
     delete,
     insert,
     select,
 )
+from utils import (
+    run_query,
+    error_message,
+    success_message,
+    format_datetime,
+)
+from models.product import Products
+from models.category import Categories
+from . import products_bp
 
-products_bp = Blueprint("products", __name__, url_prefix="/products")
-
-
-@products_bp.route("", methods=["GET"])
-def get_product_list():
-    pass
 
 @products_bp.route("", methods=["POST"])
 def create_product():
+    pass
+
+@products_bp.route("", methods=["GET"])
+def get_product_list():
     pass
 
 @products_bp.route("", methods=["PUT"])
