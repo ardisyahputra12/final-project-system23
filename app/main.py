@@ -1,37 +1,33 @@
 from flask import Flask
-from utils import create_table
-from universal import universal_bp
-from home import home_bp
-from authentication import sign_up_bp, sign_in_bp
-from product_list import products_bp, categories_bp
-from cart import cart_bp, shipping_price_bp
-from profile_page import user_bp, order_bp
-from admin_page import orders_bp, sales_bp
+from models import get_engine
+import models
+import routes
 
 
 def create_app():
     app = Flask(__name__)
+    engine = get_engine()
     blueprints = [
-        universal_bp,
-        home_bp,
-        sign_up_bp,
-        sign_in_bp,
-        products_bp,
-        categories_bp,
-        cart_bp,
-        shipping_price_bp,
-        user_bp,
-        order_bp,
-        orders_bp,
-        sales_bp
+        routes.universal_bp,
+        routes.home_bp,
+        routes.sign_up_bp,
+        routes.sign_in_bp,
+        routes.products_bp,
+        routes.categories_bp,
+        routes.cart_bp,
+        routes.shipping_price_bp,
+        routes.user_bp,
+        routes.order_bp,
+        routes.orders_bp,
+        routes.sales_bp,
     ]
+
+    models.Base.metadata.create_all(bind=engine)
 
     for blueprint in blueprints:
         app.register_blueprint(blueprint)
 
-    create_table()
     return app
 
 
-app = create_app()
-app.run()
+create_app()
