@@ -13,6 +13,7 @@ home_bp = Blueprint("home", __name__, url_prefix="/home")
 
 @home_bp.route("/banner", methods=["GET"])
 def get_image():
+    return "oi"
     pass
 
 @home_bp.route("/category", methods=["GET"])
