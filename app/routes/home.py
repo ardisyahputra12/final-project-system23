@@ -35,11 +35,11 @@ def get_image():
     
     
     if product_id == None:
-        query = run_query(f"SELECT id, image, detail FROM products")
+        query = run_query(f"SELECT id, image, detail as title FROM products")
     else:
-        query = run_query(f"SELECT id, image, detail FROM products where id='{product_id}'")
+        query = run_query(f"SELECT id, image, detail as title FROM products where id='{product_id}'")
     if query == []:
-        return "<h1>Image Not Found</h1>"
+        return {"Image not found"},400
     
     return {
         "data": [
@@ -67,7 +67,7 @@ def get_category():
     run_query(f"INSERT INTO products VALUES ('pid4', 'cid2', 'p789', '500', 'lorem', 'M', 'used', 'image1', 'imagesss', '{format_datetime()}', 'admin')", True)
     
     if product == None:
-        return "category can't be empty"
+        return {"category can't be empty"}, 400
     else:
         query = run_query(f"select p.id,p.image,c.name from products p join categories c on p.category_id = c.id where p.id = '{product}'")
     return {
