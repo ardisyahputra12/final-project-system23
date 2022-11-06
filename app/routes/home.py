@@ -12,8 +12,6 @@ from utils import (
     success_message,
     format_datetime,
 )
-from models.banner import Banner
-from models.product_images import Product_images
 from models.category import Categories
 from . import home_bp
 
