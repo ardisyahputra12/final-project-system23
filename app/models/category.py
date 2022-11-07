@@ -1,5 +1,5 @@
 from . import Base
-from utils import format_datetime
+from app.utils.format_datetime import format_datetime
 from sqlalchemy import (
     Column,
     String,

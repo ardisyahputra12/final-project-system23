@@ -6,16 +6,15 @@ from sqlalchemy import (
     insert,
     select,
 )
-from utils import (
-    run_query,
+from app.utils.query import run_query
+from app.utils.response import (
     error_message,
     success_message,
-    format_datetime,
 )
-from models.user import Users
-from models.product import Products
-from models.cart import Carts
-from models.shipping_price import ShippingPrice
+from app.models.user import Users
+from app.models.product import Products
+from app.models.cart import Carts
+from app.models.shipping_price import ShippingPrice
 from . import cart_bp, shipping_price_bp
 
 
@@ -31,6 +30,7 @@ def get_user_carts():
 def delete_cart_item():
     pass
 
+# Get shipping price after push data to model ShippingPrice in endpoint add to cart
 @shipping_price_bp.route("", methods=["GET"])
 def get_shipping_price():
     pass

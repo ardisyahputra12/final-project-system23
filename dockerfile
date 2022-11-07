@@ -6,4 +6,4 @@ RUN python3.9 -m pip install -r requirements.txt
 
 COPY /app .
 
-CMD ["flask", "--app", "main.py", "--debug", "run", "--host=0.0.0.0"]
+CMD ["flask", "--app", ".", "--debug", "run", "--host=0.0.0.0"]
