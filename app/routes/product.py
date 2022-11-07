@@ -6,17 +6,18 @@ from sqlalchemy import (
     insert,
     select,
 )
-from utils import (
-    run_query,
+from app.utils.query import run_query
+from app.utils.response import (
     error_message,
     success_message,
-    format_datetime,
 )
-from models.product import Products
-from models.category import Categories
+from app.models.product import Products
+from app.models.category import Categories
+from app.models.image import Images
 from . import products_bp
 
 
+# first save image to model Images, then for column images url in model product fill the endpoint image
 @products_bp.route("", methods=["POST"])
 def create_product():
     pass

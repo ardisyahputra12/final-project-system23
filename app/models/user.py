@@ -1,5 +1,5 @@
 from . import Base
-from utils import format_datetime
+from app.utils.format_datetime import format_datetime
 from sqlalchemy import (
     Column,
     String,
@@ -15,9 +15,9 @@ class Users(Base):
     email = Column(String, nullable=False)
     phone_number = Column(String, nullable=False)
     password = Column(String, nullable=False)
-    address = Column(String, nullable=False)
-    city = Column(String, nullable=False)
-    type = Column(String, nullable=False)               # type = seller/buyer
+    address = Column(String, nullable=True, server_default="None")
+    city = Column(String, nullable=True, server_default="None")
+    type = Column(String, nullable=True, server_default="buyer")            # type = seller/buyer  ==> default=buyer
     is_admin = Column(Boolean, nullable=True, server_default="False")
     balance = Column(Integer, nullable=True, server_default="0")
     create_at = Column(String, nullable=True, server_default=f"{format_datetime()}")

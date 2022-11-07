@@ -6,17 +6,16 @@ from sqlalchemy import (
     insert,
     select,
 )
-from utils import (
-    run_query,
+from app.utils.query import run_query
+from app.utils.response import (
     error_message,
     success_message,
-    format_datetime,
 )
-from models.product import Products
+from app.models.image import Images
 from . import universal_bp
 
 
-@universal_bp.route("", methods=["GET"])
-def get_image():
+@universal_bp.route("/<name>", methods=["GET"])
+def get_image(name):
     # Only for tes
     return success_message(200, msg="Tes Success")
