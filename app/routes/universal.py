@@ -16,7 +16,8 @@ from models.product import Products
 from . import universal_bp
 
 
-@universal_bp.route("", methods=["GET"])
+@universal_bp.route("/image", methods=["GET"])
 def get_image():
+    send_file(io.BytesIO(content), mimetype=f"image/{extension}")
     # Only for tes
     return success_message(200, msg="Tes Success")
