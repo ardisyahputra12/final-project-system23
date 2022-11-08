@@ -7,7 +7,6 @@ from sqlalchemy import (
     select,
 )
 from app.utils.query import run_query
-from app.utils.format_datetime import format_datetime
 from app.utils.response import (
     error_message,
     success_message,
@@ -35,12 +34,12 @@ def get_product_list():
     product_name = params.get("product_name", type=str)
 
     # For testing only
-    run_query(f"DELETE FROM products", True)
-    run_query(f"INSERT INTO products VALUES ('pid1', 'cid1', 'p123', '100', 'lorem', 'image1', 'used', 'S', '{format_datetime()}', 'admin')", True)
-    run_query(f"INSERT INTO products VALUES ('pid2', 'cid1', 'p123', '60', 'lorem', 'image2', 'used', 'L', '{format_datetime()}', 'admin')", True)
-    run_query(f"INSERT INTO products VALUES ('pid3', 'cid1', 'p789', '110', 'lorem', 'image3', 'used', 'M', '{format_datetime()}', 'admin')", True)
-    run_query(f"INSERT INTO products VALUES ('pid4', 'cid2', 'p789', '500', 'lorem', 'image1', 'used', 'M', '{format_datetime()}', 'admin')", True)
-    # http://127.0.0.1:5000/products?category=cid1&price=100&product_name=p123&condition=used&sort_by=price_a_z
+    run_query(delete(Products), True)
+    run_query(insert(Products).values(id=uuid.uuid4(), category_id="cid1", name="baju", price=60, condition="used", images_url="image1", detail="lorem", create_by='Saya'), True)
+    run_query(insert(Products).values(id=uuid.uuid4(), category_id="cid1", name="baju", price=100, condition="used", images_url="image1", detail="lorem", create_by='Saya'), True)
+    run_query(insert(Products).values(id=uuid.uuid4(), category_id="cid1", name="baju", price=99, condition="used", images_url="image2", detail="lorem", create_by='Saya'), True)
+    run_query(insert(Products).values(id=uuid.uuid4(), category_id="cid2", name="celana", price=110, condition="used", images_url="image2", detail="lorem", create_by='Saya'), True)
+    # http://127.0.0.1:5000/products?category=cid1&price=100&product_name=baju&condition=used&sort_by=price_a_z
 
     if category == None or price == None or product_name == None or condition == None:
         return error_message(400, "Params category, price, product_name, and condition can't empty")
