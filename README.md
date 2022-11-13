@@ -10,9 +10,16 @@ Backend repository for System23
 - Models is created, feel free for add or delete it if you think that's right
 - Documentation added in folder docs, feel free to add anything
 - Folder `/admin`, `/utils`, `/docs`
-- How to hash password? [Read this](https://techmonger.github.io/4/secure-passwords-werkzeug/ "How to store passwords securely using Werkzeug")
-- How to use errorhandler? [Read this](https://instructobit.com/tutorial/112/Python-Flask:-error-and-exception-handling#:~:text=Error%20handling%20within%20a%20Flask%20mold%2C%20works%20much,as%20either%20global%20to%20your%20application%2C%20or%20mold-specific. "Python Flask: error and exception handling")
 - Allow CORS for all domains on all routes
+- Column create_at > nullable=False
+- Add class history as parent of class model
+- Add ERD in `docs`
+
+## **Link for tutorial**
+
+- How to hash password? [How to store passwords securely using Werkzeug](https://techmonger.github.io/4/secure-passwords-werkzeug/ "techmonger.github.io")
+- How to use errorhandler? [Python Flask: error and exception handling](https://instructobit.com/tutorial/112/Python-Flask:-error-and-exception-handling#:~:text=Error%20handling%20within%20a%20Flask%20mold%2C%20works%20much,as%20either%20global%20to%20your%20application%2C%20or%20mold-specific. "instructobit.com")
+- How to use JWT? [Flask JWT Authentication Tutorial](https://www.bacancytechnology.com/blog/flask-jwt-authentication "bacancytechnology.com") or [Using JWT for user authentication in Flask](https://www.geeksforgeeks.org/using-jwt-for-user-authentication-in-flask/ "geeksforgeeks.org") or [Token-Based Authentication With Flask](https://realpython.com/token-based-authentication-with-flask/ "realpython.com")
 
 ## **How to run query use sql or orm**
 

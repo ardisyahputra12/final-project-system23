@@ -1,5 +1,5 @@
 from . import Base
-from app.utils.format_datetime import format_datetime
+from app.models.history import Histories
 from sqlalchemy import (
     Column,
     String,
@@ -8,7 +8,7 @@ from sqlalchemy import (
 )
 
 
-class Users(Base):
+class Users(Base, Histories):
     __tablename__ = 'users'
     id = Column(String, primary_key=True)
     name = Column(String, nullable=False)
@@ -20,7 +20,3 @@ class Users(Base):
     type = Column(String, nullable=True, server_default="buyer")            # type = seller/buyer  ==> default=buyer
     is_admin = Column(Boolean, nullable=True, server_default="False")
     balance = Column(Integer, nullable=True, server_default="0")
-    create_at = Column(String, nullable=True, server_default=f"{format_datetime()}")
-    create_by = Column(String, nullable=False)
-    update_at = Column(String, nullable=True, server_default="None")
-    update_by = Column(String, nullable=True, server_default="None")

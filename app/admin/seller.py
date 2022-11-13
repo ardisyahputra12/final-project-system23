@@ -5,6 +5,7 @@ from sqlalchemy import (
     select
 )
 from app.utils.query import run_query
+from app.utils.format_datetime import format_datetime
 from app.models.user import Users
 
 
@@ -28,6 +29,7 @@ def admin_seller():
                 password=pass_admin,
                 type="seller",
                 is_admin=True,
-                create_by="Developer"
+                create_at=format_datetime(),
+                create_by="Developer",
             ), True
         )
