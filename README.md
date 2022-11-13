@@ -13,6 +13,7 @@ Backend repository for System23
 - How to hash password? [Read this](https://techmonger.github.io/4/secure-passwords-werkzeug/ "How to store passwords securely using Werkzeug")
 - How to use errorhandler? [Read this](https://instructobit.com/tutorial/112/Python-Flask:-error-and-exception-handling#:~:text=Error%20handling%20within%20a%20Flask%20mold%2C%20works%20much,as%20either%20global%20to%20your%20application%2C%20or%20mold-specific. "Python Flask: error and exception handling")
 - Allow CORS for all domains on all routes
+- Column create_at > nullable=False
 
 ## **How to run query use sql or orm**
 

@@ -1,5 +1,5 @@
 from . import Base
-from app.utils.format_datetime import format_datetime
+from app.models.history import Histories
 from sqlalchemy import (
     Column,
     String,
@@ -8,7 +8,7 @@ from sqlalchemy import (
 )
 
 
-class Products(Base):
+class Products(Base, Histories):
     __tablename__ = 'products'
     id = Column(String, primary_key=True)
     category_id = Column(String, ForeignKey('categories.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
@@ -18,7 +18,3 @@ class Products(Base):
     images_url = Column(String, nullable=False)
     detail = Column(String, nullable=False)
     size = Column(String, nullable=True, server_default="['S', 'M', 'L', 'XL']")
-    create_at = Column(String, nullable=True, server_default=f"{format_datetime()}")
-    create_by = Column(String, nullable=False)
-    update_at = Column(String, nullable=True, server_default="None")
-    update_by = Column(String, nullable=True, server_default="None")
