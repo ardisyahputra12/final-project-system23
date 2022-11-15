@@ -34,29 +34,24 @@ def get_category_all():
 @categories_bp.route("", methods=["POST"])
 @decode_auth_token
 def create_category(current_user):
-    token = request.headers["Authentication"]
     data = request.get_json()
 
-    if run_query(select(Users.id).where(Users.id==token)) == []:
+    if run_query(select(Users.id).where(Users.id==current_user)) == []:
         return error_message(400, "User not found")
-    elif run_query(select(Users.is_admin).where(Users.id==token)) == [{"is_admin": False}]:
+    elif run_query(select(Users.is_admin).where(Users.id==current_user)) == [{"is_admin": False}]:
         return error_message(403, "Unauthorized user")
     elif ("category_name" not in data) or (data["category_name"] == ""):
         return error_message(400, "Unknown request")
     elif run_query(select(Categories.name).where(Categories.name==data["category_name"])) == [{"name": data["category_name"]}]:
         return error_message(409, f"Category '{data['category_name']}' already exist")
     else:
-        user_name = run_query(select(Users.name).where(Users.id==token))[0]["name"]
+        user_name = run_query(select(Users.name).where(Users.id==current_user))[0]["name"]
         run_query(insert(Categories).values(id=uuid.uuid4(), name=data["category_name"], create_at=format_datetime(), create_by=user_name), True)
         return success_message(201, msg=f"Category '{data['category_name']}' added")
 
 @categories_bp.route("", methods=["GET"])
 def get_category():
-    token = request.headers["Authentication"]
-
-    if run_query(select(Users.id).where(Users.id==token)) == []:
-        return error_message(400, "User not found")
-    elif run_query(select(Categories)) == []:
+    if run_query(select(Categories)) == []:
         return success_message(200, data="Category is empty")
     else:
         query = run_query(select(Categories.id, Categories.name))
@@ -65,14 +60,13 @@ def get_category():
 @categories_bp.route("/<category_id>", methods=["PUT"])
 @decode_auth_token
 def update_category(current_user, category_id):
-    token = request.headers["Authentication"]
     data = request.get_json()
 
     if run_query(select(Categories.id).where(Categories.id==category_id)) == []:
         return error_message(400, "Category not found")
-    elif run_query(select(Users.id).where(Users.id==token)) == []:
+    elif run_query(select(Users.id).where(Users.id==current_user)) == []:
         return error_message(400, "User not found")
-    elif run_query(select(Users.is_admin).where(Users.id==token)) == [{"is_admin": False}]:
+    elif run_query(select(Users.is_admin).where(Users.id==current_user)) == [{"is_admin": False}]:
         return error_message(403, "Unauthorized user")
     elif (("category_name" not in data) or (data["category_name"] == "")) or (("category_id" not in data) or (data["category_id"] == "")):
         return error_message(400, "Unknown request")
@@ -81,7 +75,7 @@ def update_category(current_user, category_id):
     elif run_query(select(Categories.id).where(Categories.id==data["category_id"])) == [{"id": data["category_id"]}]:
         return error_message(409, f"Id of category must be unique")
     else:
-        user_name = run_query(select(Users.name).where(Users.id==token))[0]["name"]
+        user_name = run_query(select(Users.name).where(Users.id==current_user))[0]["name"]
         category_name = run_query(select(Categories.name).where(Categories.id==category_id))[0]["name"]
         run_query(update(Categories).values(id=data["category_id"], name=data["category_name"], update_at=format_datetime(), update_by=user_name).where(Categories.id==category_id), True)
         return success_message(200, msg=f"Category '{category_name}' updated to '{data['category_name']}'")
@@ -89,13 +83,11 @@ def update_category(current_user, category_id):
 @categories_bp.route("/<category_id>", methods=["DELETE"])
 @decode_auth_token
 def delete_category(current_user, category_id):
-    token = request.headers["Authentication"]
-
     if run_query(select(Categories.id).where(Categories.id==category_id)) == []:
         return error_message(400, "Category not found")
-    elif run_query(select(Users.id).where(Users.id==token)) == []:
+    elif run_query(select(Users.id).where(Users.id==current_user)) == []:
         return error_message(400, "User not found")
-    elif run_query(select(Users.is_admin).where(Users.id==token)) == [{"is_admin": False}]:
+    elif run_query(select(Users.is_admin).where(Users.id==current_user)) == [{"is_admin": False}]:
         return error_message(403, "Unauthorized user")
     else:
         category_name = run_query(select(Categories.name).where(Categories.id==category_id))[0]["name"]
