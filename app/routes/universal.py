@@ -18,5 +18,4 @@ from . import universal_bp
 
 @universal_bp.route("/<name>", methods=["GET"])
 def get_image(name):
-    # Only for tes
-    return success_message(200, msg="Tes Success")
+    pass

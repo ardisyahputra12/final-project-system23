@@ -14,12 +14,20 @@ Backend repository for System23
 - Column create_at > nullable=False
 - Add class history as parent of class model
 - Add ERD in `docs`
+- Add JWT token, this functions add to `utils/auth_token.py`
+  - encode function used when sign-in, this return a token, and it will be expired during 720 minutes or 12 hours
+  - decode function used in every endpoint which contain `Authorization token` in request header, this return **User ID**, and it as `current_user` in parameter of endpoint
+- Every endpoint within decorator `decode_auth_token` must fill `Authorization token` in header. Ex:
+  - Authorization: Jwt xxxx.yyyy.zzzz
 
 ## **Link for tutorial**
 
 - How to hash password? [How to store passwords securely using Werkzeug](https://techmonger.github.io/4/secure-passwords-werkzeug/ "techmonger.github.io")
 - How to use errorhandler? [Python Flask: error and exception handling](https://instructobit.com/tutorial/112/Python-Flask:-error-and-exception-handling#:~:text=Error%20handling%20within%20a%20Flask%20mold%2C%20works%20much,as%20either%20global%20to%20your%20application%2C%20or%20mold-specific. "instructobit.com")
-- How to use JWT? [Flask JWT Authentication Tutorial](https://www.bacancytechnology.com/blog/flask-jwt-authentication "bacancytechnology.com") or [Using JWT for user authentication in Flask](https://www.geeksforgeeks.org/using-jwt-for-user-authentication-in-flask/ "geeksforgeeks.org") or [Token-Based Authentication With Flask](https://realpython.com/token-based-authentication-with-flask/ "realpython.com")
+- How to use JWT?
+  - [Introduction to JSON Web Tokens](https://jwt.io/introduction/ "jwt.io")
+  - [Using JWT for user authentication in Flask](https://www.geeksforgeeks.org/using-jwt-for-user-authentication-in-flask/ "geeksforgeeks.org")
+  - [Token-Based Authentication With Flask](https://realpython.com/token-based-authentication-with-flask/ "realpython.com")
 
 ## **How to run query use sql or orm**
 

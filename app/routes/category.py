@@ -8,16 +8,19 @@ from sqlalchemy import (
 )
 from app.utils.query import run_query
 from app.utils.format_datetime import format_datetime
+from app.utils.auth_token import decode_auth_token
 from app.utils.response import (
     error_message,
     success_message,
 )
+from app.models.user import Users
 from app.models.category import Categories
 from . import categories_bp
 
 
 @categories_bp.route("", methods=["POST"])
-def create_category():
+@decode_auth_token
+def create_category(current_user):
     pass
 
 @categories_bp.route("", methods=["GET"])
@@ -25,9 +28,11 @@ def get_category():
     pass
 
 @categories_bp.route("", methods=["PUT"])
-def update_category():
+@decode_auth_token
+def update_category(current_user):
     pass
 
 @categories_bp.route("", methods=["DELETE"])
-def delete_category():
+@decode_auth_token
+def delete_category(current_user):
     pass
