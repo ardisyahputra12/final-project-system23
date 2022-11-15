@@ -45,8 +45,8 @@ def decode_auth_token(f):
     def decorated(*args, **kwargs):
         token = None
 
-        if 'Authorization' in request.headers:
-            token = request.headers['Authorization'].split(" ")[1]
+        if 'Authentication' in request.headers:
+            token = request.headers['Authentication'].split(" ")[1]
 
         if not token:
             return error_message(401, "Token is missing !!")
