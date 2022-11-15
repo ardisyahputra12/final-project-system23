@@ -8,6 +8,7 @@ from sqlalchemy import (
 )
 from app.utils.query import run_query
 from app.utils.format_datetime import format_datetime
+from app.utils.auth_token import decode_auth_token
 from app.utils.response import (
     error_message,
     success_message,
@@ -31,7 +32,8 @@ def get_category_all():
 # ==========================================================================
 
 @categories_bp.route("", methods=["POST"])
-def create_category():
+@decode_auth_token
+def create_category(current_user):
     token = request.headers["Authentication"]
     data = request.get_json()
 
@@ -61,7 +63,8 @@ def get_category():
         return success_message(200, data=query)
 
 @categories_bp.route("/<category_id>", methods=["PUT"])
-def update_category(category_id):
+@decode_auth_token
+def update_category(current_user, category_id):
     token = request.headers["Authentication"]
     data = request.get_json()
 
@@ -84,7 +87,8 @@ def update_category(category_id):
         return success_message(200, msg=f"Category '{category_name}' updated to '{data['category_name']}'")
 
 @categories_bp.route("/<category_id>", methods=["DELETE"])
-def delete_category(category_id):
+@decode_auth_token
+def delete_category(current_user, category_id):
     token = request.headers["Authentication"]
 
     if run_query(select(Categories.id).where(Categories.id==category_id)) == []:
