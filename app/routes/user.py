@@ -19,7 +19,15 @@ from . import user_bp, sales_bp
 
 @user_bp.route("", methods=["GET"])
 def user_details():
-    pass
+    req = request.args
+    id = req.get("id")
+    
+    # if id == None:
+    #     return run_query (f"select name,email,phone_number from users")
+    # else:
+    #     return run_query(f"select name,email,phone_number from users where id = '{id}'")
+    
+    return run_query (f"select name,email,phone_number from users")
 
 # Change to table Users and column shipping_address in table Orders
 @user_bp.route("/shipping_address", methods=["POST"])
