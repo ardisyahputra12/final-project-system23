@@ -6,8 +6,8 @@ from sqlalchemy import (
 )
 
 
-class Categories(Base, Histories):
-    __tablename__ = 'categories'
+class Images(Base, Histories):
+    __tablename__ = 'images'
     id = Column(String, primary_key=True)
     name = Column(String, nullable=False)
-    status = Column(String, nullable=True, server_default="available")          # condition == available/soft_delete
+    image = Column(String, nullable=False)
