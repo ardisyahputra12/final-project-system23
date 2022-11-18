@@ -21,53 +21,37 @@ from . import home_bp
 @home_bp.route("/banner", methods=["GET"])
 def get_image():
     req = request.args
-    product_id = req.get("product")
+    product_categories = req.get("product_categories")
     
     # For testing only
     run_query(f"DELETE FROM categories", True)
-    # run_query(f"INSERT INTO categories VALUES ('cid1', 'baju', '{format_datetime()}', 'admin')", True)
-    # run_query(f"INSERT INTO categories VALUES ('cid','baju','avaible')",True)
+    run_query(insert(Categories).values(id='cid1',name='baju',status='available',create_at=format_datetime(),create_by='admin'),True)
+    run_query(insert(Categories).values(id='cid2',name='celana',status='available',create_at=format_datetime(),create_by='admin'),True)
+    run_query(insert(Products).values(name='baju',price='200',condition='new',detail='detail',id='pid1',images_url='images_1',size='M',create_at=format_datetime(),create_by='admin',category_id='cid1'),True)
+    run_query(insert(Products).values(name='baju',price='250',condition='soft',detail='detail',id='pid2',images_url='images_2',size='XL',create_at=format_datetime(),create_by='admin',category_id='cid1'),True)
+    run_query(insert(Products).values(name='celana',price='150',condition='new',detail='detail',id='pid3',images_url='images_3',size='S',create_at=format_datetime(),create_by='admin',category_id='cid2'),True)
     
-    if product_id == None:
-        # query = run_query(f"SELECT id, images_url, detail as title FROM products")
-        query = run_query(select(Categories.id,Categories.))
-        return success_message(200, data=query)
-    else:
-        query = run_query(f"SELECT id, images_url, detail as title FROM products where id='{product_id}'")
-    if query == []:
-        return {"Image not found"},400
+    query = run_query(select(Products.id,Products.images_url,Products.detail,Categories.name))
+    return success_message(200, data=query)
     
-    # return {
-    #     "data":[
-    #         query
-    #     ]
-    # },200
-
 @home_bp.route("/category", methods=["GET"])
 def get_category():
     req = request.args
-    category = req.get("category")
-    product = req.get("product")
-    
+    product_categories = req.get("product_categories")
     
     # For testing only
-    # run_query(f"DELETE FROM categories", True)
-    # run_query(f"INSERT INTO categories VALUES ('cid1', 'baju', '{format_datetime()}', 'admin')", True)
-    # run_query(f"INSERT INTO categories VALUES ('cid2', 'celana', '{format_datetime()}', 'admin')", True)
-    # run_query(f"INSERT INTO categories VALUES ('cid3', 'kaos', '{format_datetime()}', 'admin')", True)
+    run_query(f"DELETE FROM categories", True)
+    run_query(insert(Categories).values(id='cid1',name='baju',status='available',create_at=format_datetime(),create_by='admin'),True)
+    run_query(insert(Categories).values(id='cid2',name='celana',status='available',create_at=format_datetime(),create_by='admin'),True)
+    run_query(insert(Products).values(name='baju',price='200',condition='new',detail='detail',id='pid1',images_url='images_1',size='M',create_at=format_datetime(),create_by='admin',category_id='cid1'),True)
+    run_query(insert(Products).values(name='baju',price='250',condition='soft',detail='detail',id='pid2',images_url='images_2',size='XL',create_at=format_datetime(),create_by='admin',category_id='cid1'),True)
+    run_query(insert(Products).values(name='celana',price='150',condition='new',detail='detail',id='pid3',images_url='images_3',size='S',create_at=format_datetime(),create_by='admin',category_id='cid2'),True)
     
-    # run_query(f"DELETE FROM products", True)
-    # run_query(f"INSERT INTO products VALUES ('pid1', 'cid1', 'p123', '100', 'lorem', 'S', 'used', 'image1', 'imagesss', '{format_datetime()}', 'admin')", True)
-    # run_query(f"INSERT INTO products VALUES ('pid2', 'cid1', 'p123', '60', 'lorem', 'L', 'used', 'image2', 'imagesss', '{format_datetime()}', 'admin')", True)
-    # run_query(f"INSERT INTO products VALUES ('pid3', 'cid1', 'p789', '110', 'lorem', 'M', 'used', 'image3', 'imagesss', '{format_datetime()}', 'admin')", True)
-    # run_query(f"INSERT INTO products VALUES ('pid4', 'cid2', 'p789', '500', 'lorem', 'M', 'used', 'image1', 'imagesss', '{format_datetime()}', 'admin')", True)
-    
-    if product == None:
-        return {"category can't be empty"}, 400
-    else:
-        query = run_query(f"select p.id,p.image,c.name from products p join categories c on p.category_id = c.id where p.id = '{product}'")
-    return {
-        "data": [
-            query
-        ]
-    },200
+    if product_categories == None:
+        return error_message(400, "product_categories can't empty.")
+    elif product_categories != None:
+        query = run_query(select(Products.id,Products.images_url,Products.detail).where(Products.name==product_categories))
+        if query !=[]:
+            return success_message(200, data=query)
+        else:
+            return error_message(400,"product not available")
