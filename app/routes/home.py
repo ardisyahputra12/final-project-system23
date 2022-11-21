@@ -21,7 +21,6 @@ from . import home_bp
 @home_bp.route("/banner", methods=["GET"])
 def get_image():
     req = request.args
-    product_categories = req.get("product_categories")
     
     # For testing only
     run_query(f"DELETE FROM categories", True)

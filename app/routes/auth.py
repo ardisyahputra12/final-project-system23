@@ -131,10 +131,15 @@ def sign_up():
         return error_message(400, "password must contain a number")
     else :
         pass_hash = generate_password_hash(password)
-        run_query("delete from users",True)
-        run_query(insert(Users).values(id=id,name=name,email=email,phone_number=number,password=pass_hash,type=type,is_admin=False,balance=0,create_at=format_datetime(),create_by='user'),True)
-        query = run_query(select(Users.name,Users.email,Users.phone_number,Users.password))
-        return success_message(200, data=query)
+        # run_query("delete from users",True)
+        if run_query(select(Users.name).where(Users.name==name)):
+            return error_message(400, "name already used")
+        elif run_query(select(Users.email).where(Users.email==email)):
+            return error_message(400, "email already used")
+        else:
+            run_query(insert(Users).values(id=id,name=name,email=email,phone_number=number,password=pass_hash,type=type,is_admin=False,balance=0,create_at=format_datetime(),create_by='user'),True)
+            # query = run_query(select(Users.name,Users.email,Users.phone_number,Users.password))
+            return success_message(200, "success, user created")
             
 
 @sign_in_bp.route("", methods=["POST"])
@@ -148,15 +153,22 @@ def sign_in():
     body = request.json
     email = body["email"]
     password = body["password"]
-    pass_hash = generate_password_hash(password)
+    # pass_hash = generate_password_hash(password)
     
-    run_query("delete from users",True)
-    run_query(insert(Users).values(id='2382392849',name='ska',email="emaisakhl",phone_number="number",password=pass_hash,type='buyer',is_admin=False,balance=0,create_at=format_datetime(),create_by='user'),True)
+    # run_query("delete from users",True)
+    # run_query(insert(Users).values(id='2382392849',name='ska',email="emaisakhl",phone_number="number",password=pass_hash,type='buyer',is_admin=False,balance=0,create_at=format_datetime(),create_by='user'),True)
     
     query = run_query(select(Users.email,Users.password).where(Users.email==email and Users.password==password))
+    try:
+        query[0]
+    except Exception:
+        return error_message(400, "your account not found")
+    
     if check_password_hash(query[0]['password'],password):
         query = run_query(select(Users.name,Users.email,Users.phone_number,Users.type).where(Users.email==email))
-        return success_message(200, query)
+        user_id = run_query(select(Users.id).where(Users.email==email and Users.password==password))[0]["id"]
+        token = encode_auth_token(user_id)
+        return success_message(200, data=query, tkn=token)
     else:
         return error_message(400, "email or password is wrong")
         
