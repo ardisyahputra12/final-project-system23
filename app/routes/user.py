@@ -6,14 +6,13 @@ from sqlalchemy import (
     insert,
     select,
 )
-from utils import (
-    run_query,
+from app.utils.query import run_query
+from app.utils.response import (
     error_message,
     success_message,
-    format_datetime,
 )
-from models.user import Users
-from models.order import Orders
+from app.models.user import Users
+from app.models.order import Orders
 from . import user_bp, sales_bp
 
 
@@ -21,12 +20,12 @@ from . import user_bp, sales_bp
 def user_details():
     pass
 
-# Change to table Users and column shipping_address in table Orders
+# Change to model Users
 @user_bp.route("/shipping_address", methods=["POST"])
 def change_shipping_address():
     pass
 
-# Get data from table user
+# Get data from model Users
 @user_bp.route("/shipping_address", methods=["GET"])
 def get_user_shipping_address():
     pass

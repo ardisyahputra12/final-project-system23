@@ -1,20 +1,16 @@
-mfrom . import Base
+from . import Base
 from app.utils.format_datetime import format_datetime
 from sqlalchemy import (
     Column,
     String,
-    Integer,
-    ForeignKey,
 )
 
 
-class Carts(Base):
-    __tablename__ = 'carts'
+class Images(Base):
+    __tablename__ = 'images'
     id = Column(String, primary_key=True)
-    user_id = Column(String, ForeignKey('users.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
-    product_id = Column(String, ForeignKey('products.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
-    size = Column(String, nullable=False)
-    quantity = Column(Integer, nullable=False)
+    name = Column(String, nullable=False)
+    image = Column(String, nullable=False)
     create_at = Column(String, nullable=True, server_default=f"{format_datetime()}")
     create_by = Column(String, nullable=False)
     update_at = Column(String, nullable=True, server_default="None")
