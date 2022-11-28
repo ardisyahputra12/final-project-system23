@@ -28,14 +28,15 @@ def add_to_cart():
     size = body.get("size")
     token = header.get("Authentication")
 
-    #TABLE INIT
+    #TABLE INIT(tidak dipakai lagi)
+    '''
     users = Table('users', MetaData(bind=get_engine()), autoload=True)
     products = Table('products', MetaData(bind=get_engine), autoload=True)
     carts = Table('carts', MetaData(bind=get_engine), autoload=True)
+    '''
 
     #IDENFITY USER AND TOKEN
-    user = run_query(select(users.c.id_user).where(users.c.token == token))
-
+    user = run_query(select(users.id).where(users.id == token))
     if user == False:
         return {"messege": "error, user is invalid"}, 400
     else:
@@ -47,6 +48,7 @@ def add_to_cart():
             "size": size
         }
 
+
     run_query(insert(carts).values(data),commit=True)
     return {"message" : "item added to cart"}, 201
 
@@ -56,6 +58,24 @@ def get_user_carts():
 
 @cart_bp.route("", methods=["DELETE"])
 def delete_cart_item():
+    # IMPLEMENT THIS
+    header = request.headers
+    token = header.get("Authentication")
+
+    #TABLE INIT(tidak dipakai lagi)
+    '''
+    users = Table("users", MetaData(bind=get_engine()), autoload=True)
+    carts = Table("carts", MetaData(bind=get_engine()), autoload=True)
+    '''
+
+    user = run_query(select(users).where(users.c.token == token))
+
+    if len(user) == 0:
+        return {"message": "error, user is invalid"}, 400
+    else:
+        run_query(delete(carts).where(carts.id_cart == cart_id))
+        return {"message": "Cart deleted"}, 200
+
     pass
 
 # Get shipping price after push data to model ShippingPrice in endpoint add to cart
