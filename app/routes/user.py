@@ -7,6 +7,8 @@ from sqlalchemy import (
     select,
 )
 from app.utils.query import run_query
+from app.utils.format_datetime import format_datetime
+from app.utils.auth_token import decode_auth_token
 from app.utils.response import (
     error_message,
     success_message,
@@ -17,27 +19,33 @@ from . import user_bp, sales_bp
 
 
 @user_bp.route("", methods=["GET"])
-def user_details():
+@decode_auth_token
+def user_details(current_user):
     pass
 
 # Change to model Users
 @user_bp.route("/shipping_address", methods=["POST"])
-def change_shipping_address():
+@decode_auth_token
+def change_shipping_address(current_user):
     pass
 
 # Get data from model Users
 @user_bp.route("/shipping_address", methods=["GET"])
-def get_user_shipping_address():
+@decode_auth_token
+def get_user_shipping_address(current_user):
     pass
 
 @user_bp.route("/balance", methods=["POST"])
-def top_up_balance():
+@decode_auth_token
+def top_up_balance(current_user):
     pass
 
 @user_bp.route("/balance", methods=["GET"])
-def get_user_balance():
+@decode_auth_token
+def get_user_balance(current_user):
     pass
 
 @sales_bp.route("", methods=["GET"])
-def get_total_sales():
+@decode_auth_token
+def get_total_sales(current_user):
     pass

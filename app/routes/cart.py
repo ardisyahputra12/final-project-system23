@@ -7,6 +7,8 @@ from sqlalchemy import (
     select,
 )
 from app.utils.query import run_query
+from app.utils.format_datetime import format_datetime
+from app.utils.auth_token import decode_auth_token
 from app.utils.response import (
     error_message,
     success_message,
@@ -19,6 +21,7 @@ from . import cart_bp, shipping_price_bp
 
 
 @cart_bp.route("", methods=["POST"])
+<<<<<<< HEAD
 def add_to_cart():
     # IMPLEMENT THIS
     header = request.headers
@@ -51,12 +54,19 @@ def add_to_cart():
 
     run_query(insert(carts).values(data),commit=True)
     return {"message" : "item added to cart"}, 201
+=======
+@decode_auth_token
+def add_to_cart(current_user):
+    pass
+>>>>>>> f2aa20ea8497378289d897bf749f36aa0bd4d78c
 
 @cart_bp.route("", methods=["GET"])
-def get_user_carts():
+@decode_auth_token
+def get_user_carts(current_user):
     pass
 
 @cart_bp.route("", methods=["DELETE"])
+<<<<<<< HEAD
 def delete_cart_item():
     # IMPLEMENT THIS
     header = request.headers
@@ -76,9 +86,14 @@ def delete_cart_item():
         run_query(delete(carts).where(carts.id_cart == cart_id))
         return {"message": "Cart deleted"}, 200
 
+=======
+@decode_auth_token
+def delete_cart_item(current_user):
+>>>>>>> f2aa20ea8497378289d897bf749f36aa0bd4d78c
     pass
 
 # Get shipping price after push data to model ShippingPrice in endpoint add to cart
 @shipping_price_bp.route("", methods=["GET"])
-def get_shipping_price():
+@decode_auth_token
+def get_shipping_price(current_user):
     pass

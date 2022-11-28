@@ -7,6 +7,8 @@ from sqlalchemy import (
     select,
 )
 from app.utils.query import run_query
+from app.utils.format_datetime import format_datetime
+from app.utils.auth_token import decode_auth_token
 from app.utils.response import (
     error_message,
     success_message,
@@ -19,13 +21,16 @@ from . import order_bp, orders_bp
 
 
 @order_bp.route("", methods=["POST"])
-def create_order():
+@decode_auth_token
+def create_order(current_user):
     pass
 
 @order_bp.route("", methods=["GET"])
-def user_orders():
+@decode_auth_token
+def user_orders(current_user):
     pass
 
 @orders_bp.route("", methods=["GET"])
-def get_orders():
+@decode_auth_token
+def get_orders(current_user):
     pass
