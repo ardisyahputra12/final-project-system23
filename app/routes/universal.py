@@ -22,10 +22,6 @@ def get_image():
 
 @universal_bp.route("/<name>", methods=["GET"])
 def get_image(name):
-<<<<<<< HEAD
     f141ba56ad053241ebb0627e351f6ac20184d382
     # Only for tes
     return success_message(200, msg="Tes Success")
-=======
-    pass
->>>>>>> f2aa20ea8497378289d897bf749f36aa0bd4d78c
