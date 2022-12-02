@@ -240,7 +240,9 @@ function AdminFormContent(props) {
                 fetch(EndPoint + Categories, {
                     method: "POST",
                     headers: {
-                        'Authentication': getCookie("adminToken")
+                        'Authentication': getCookie("adminToken"),
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         category_name: values.title,
@@ -261,7 +263,9 @@ function AdminFormContent(props) {
                 fetch(EndPoint + Categories + "/" + tmpVar[0], {
                     method: "PUT",
                     headers: {
-                        'Authentication': getCookie("adminToken")
+                        'Authentication': getCookie("adminToken"),
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         category_name: values.title,
@@ -290,7 +294,9 @@ function AdminFormContent(props) {
                 fetch(EndPoint + ProductsList, {
                     method: "POST",
                     headers: {
-                        'Authentication': getCookie("adminToken")
+                        'Authentication': getCookie("adminToken"),
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         product_name: values.name,
@@ -316,7 +322,9 @@ function AdminFormContent(props) {
                 fetch(EndPoint + ProductsList, {
                     method: "PUT",
                     headers: {
-                        'Authentication': getCookie("adminToken")
+                        'Authentication': getCookie("adminToken"),
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         product_id: tmpVar,

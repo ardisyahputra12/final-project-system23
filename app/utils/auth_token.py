@@ -46,7 +46,7 @@ def decode_auth_token(f):
         token = None
 
         if 'Authentication' in request.headers:
-            token = request.headers['Authentication'].split(" ")[1]
+            token = request.headers['Authentication']
 
         if not token:
             return error_message(401, "Token is missing !!")
@@ -59,9 +59,9 @@ def decode_auth_token(f):
             )
             current_user = payload['sub']
         except ExpiredSignatureError:
-            return 'Signature expired. Please log in again.'
+            return error_message(401, 'Signature expired. Please log in again.')
         except InvalidTokenError:
-            return 'Invalid token. Please log in again.'
+            return error_message(401, 'Invalid token. Please log in again.')
         return f(current_user, *args, **kwargs)
 
     return decorated
