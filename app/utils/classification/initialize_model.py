@@ -1,9 +1,8 @@
 from torch import nn
 from torch.nn.parameter import Parameter
 import torch.optim as optim
-from preprocesing import device
-from resnet import ResNet
-from resnet import ResnetBlock
+from app.utils.classification.preprocesing import device
+from app.utils.classification.resnet import ResNet, ResnetBlock
 import torch
 
 def init_weights(m):
@@ -18,7 +17,7 @@ model.apply(init_weights)
 
 # load pretrained state
 model.to(device)
-model.load_state_dict(torch.load("test_acc-8102-epoch19.pth"))
+model.load_state_dict(torch.load("/app/utils/classification/test_acc-8102-epoch19.pth"))
 # model.load_state_dict(torch.load("models\\training.pt"))
 
 # Loss fn

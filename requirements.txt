@@ -12,5 +12,5 @@ numpy==1.23.4
 opencv_python==4.6.0.66
 pandas==1.5.1
 requests==2.28.1
-torch==1.9.0
-torchvision==0.10.0
+torch -f https://download.pytorch.org/whl/cu116
+torchvision -f https://download.pytorch.org/whl/cu116

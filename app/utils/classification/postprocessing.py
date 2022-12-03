@@ -1,8 +1,8 @@
 import torch
 
-from inference import make_predictions
-from preprocesing import device, t_test, test_loader
-from resnet import ResNet, ResnetBlock, conv1x1, conv3x3
+from app.utils.classification.inference import make_predictions
+from app.utils.classification.preprocesing import device, t_test, test_loader
+from app.utils.classification.resnet import ResNet, ResnetBlock, conv1x1, conv3x3
 
 # Load model
 model = ResNet(ResnetBlock, [2,2,2,2], k=2)
@@ -54,8 +54,7 @@ y_class =[
 dummy = y_class[pred_classes[0]]
 
 # test jurry test
-import torch
-
+# function for search product by image
 def search_product(images):
     img_transform  =t_test(images)
     img_transform = torch.FloatTensor(img_transform).view(-1,1,28,28)

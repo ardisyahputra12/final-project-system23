@@ -1,8 +1,7 @@
 import torch
-from preprocesing import device
-from initialize_model import model
-from preprocesing import test_loader
-from initialize_model import criterion
+from app.utils.classification.preprocesing import device
+from app.utils.classification.initialize_model import model, criterion
+from app.utils.classification.preprocesing import test_loader
  
 # Move values to device
 torch.manual_seed(42)
