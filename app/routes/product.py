@@ -1,4 +1,7 @@
 import uuid
+import base64
+from PIL import Image
+from io import BytesIO
 from flask import request
 from sqlalchemy import (
     update,
@@ -7,6 +10,7 @@ from sqlalchemy import (
     select,
     and_,
 )
+from app.utils.classification.postprocessing import search_product
 from app.utils.query import run_query
 from app.utils.format_datetime import format_datetime
 from app.utils.auth_token import decode_auth_token
@@ -203,11 +207,22 @@ def delete_product(current_user, product_id):
 
 @products_bp.route("/search_image", methods=["POST"])
 def search_product_by_image():
-    # http://127.0.0.1:5000/products/search_image
+    # from PIL import Image
+
+    # images = Image.open("data\Jury Test Set\mnist_58.png")
+
     body = request.get_json()
-    if ("image" not in body) or (body["image"] == ""): return error_message(400, "Can't search image, image is empty!")
-    query = run_query(f"SELECT DISTINCT category_id FROM products WHERE image LIKE '%{body['image']}%'")
-    return success_message(200, key="result", data=query)
+    # user_name = run_query(select(Users.name).where(Users.id==current_user))[0]["name"]
+    # image_name = f"image-search-{uuid.uuid4()}.jpg"
+
+    # run_query(insert(Images).values(id=uuid.uuid4(), name=image_name, image=body["image"], create_at=format_datetime(), create_by=user_name), True)
+
+    # if ("image" not in body) or (body["image"] == ""): return error_message(400, "Can't search image, image is empty!")
+    # query = run_query(f"SELECT DISTINCT category_id FROM products WHERE image LIKE '%{body['image']}%'")
+    img_decode = Image.open(BytesIO(base64.b64decode(body["image"])))
+    img = search_product(img_decode)
+    query = run_query(select(Categories.id).where(Categories.title==img))
+    return success_message(200, key="category_id", data=query)
 
 
 @products_bp.route("/<product_id>", methods=["GET"])

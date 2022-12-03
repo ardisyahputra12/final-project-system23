@@ -31,27 +31,35 @@ pred_probs= make_predictions(model=model,
 
 pred_classes = pred_probs.argmax(dim=1)
 
-y_class =['T-shirt/top',
- 'Trouser',
- 'Pullover',
- 'Dress',
- 'Coat',
- 'Sandal',
- 'Shirt',
- 'Sneaker',
- 'Bag',
- 'Ankle boot']
+# y_class =['T-shirt/top',
+#  'Trouser',
+#  'Pullover',
+#  'Dress',
+#  'Coat',
+#  'Sandal',
+#  'Shirt',
+#  'Sneaker',
+#  'Bag',
+#  'Ankle boot']
+
+y_class =[
+    'T-shirt/top',
+    'Trouser',
+    'Sandal',
+    'Shirt',
+    'Sneaker',
+    'Bag'
+]
 
 dummy = y_class[pred_classes[0]]
 
 # test jurry test
 import torch
-from PIL import Image
 
-images = Image.open("data\Jury Test Set\mnist_58.png")
-img_transform  =t_test(images)
-img_transform = torch.FloatTensor(img_transform).view(-1,1,28,28)
+def search_product(images):
+    img_transform  =t_test(images)
+    img_transform = torch.FloatTensor(img_transform).view(-1,1,28,28)
 
-y_probs = make_predictions(model,img_transform)
-y_preds = y_probs.argmax(axis=1)
-print(y_class[y_preds])
+    y_probs = make_predictions(model,img_transform)
+    y_preds = y_probs.argmax(axis=1)
+    return y_class[y_preds]
