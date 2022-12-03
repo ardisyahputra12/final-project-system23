@@ -51,7 +51,7 @@ def make_predictions(model: torch.nn.Module, data: list, device: torch.device = 
 
 # Calculate model 1 results with device-agnostic code 
 # Import accuracy metric
-from helper_functions import accuracy_fn
+from app.utils.classification.helper_functions import accuracy_fn
 model.to(device)
 model.load_state_dict(torch.load("/app/utils/classification/test_acc-8102-epoch19.pth",map_location=device))
 model_results = eval_model(model=model, data_loader=test_loader,
