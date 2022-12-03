@@ -11,7 +11,8 @@ if torch.cuda.is_available():
 else:
     use_cuda=False
 
-device = torch.device("cuda:0" if use_cuda else "cpu")
+# device = torch.device("cuda:0" if use_cuda else "cpu")
+device = torch.device('cpu')
 
 data_train = torchvision.datasets.FashionMNIST("data/FashionMNIST/resnet", train=True, transform=None, target_transform=None, download=True)
 data_test = torchvision.datasets.FashionMNIST("data/FashionMNIST/resnet", train=False, transform=None, target_transform=None, download=True)
@@ -91,7 +92,6 @@ t = transforms.Compose([transforms.RandomHorizontalFlip(p=0.5),
                         BlackoutTransform(),
                         ReshapeTransform((1, 28, 28))
 ])
-
 t_test = transforms.Compose([transforms.Pad((5,6)),
                         transforms.RandomCrop(size=28, padding_mode="reflect"),
                         transforms.Grayscale(num_output_channels=1),

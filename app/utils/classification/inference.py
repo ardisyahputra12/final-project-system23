@@ -53,8 +53,9 @@ def make_predictions(model: torch.nn.Module, data: list, device: torch.device = 
 # Import accuracy metric
 from helper_functions import accuracy_fn
 model.to(device)
-model.load_state_dict(torch.load("test_acc-8102-epoch19.pth"))
+model.load_state_dict(torch.load("/app/utils/classification/test_acc-8102-epoch19.pth",map_location=device))
 model_results = eval_model(model=model, data_loader=test_loader,
     loss_fn=criterion, accuracy_fn=accuracy_fn,
     device=device
 )
+print(model_results)

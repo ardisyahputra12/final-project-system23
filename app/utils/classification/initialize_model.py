@@ -17,7 +17,7 @@ model.apply(init_weights)
 
 # load pretrained state
 model.to(device)
-model.load_state_dict(torch.load("/app/utils/classification/test_acc-8102-epoch19.pth"))
+model.load_state_dict(torch.load("/app/utils/classification/test_acc-8102-epoch19.pth",map_location=device))
 # model.load_state_dict(torch.load("models\\training.pt"))
 
 # Loss fn

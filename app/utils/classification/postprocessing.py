@@ -6,10 +6,10 @@ from app.utils.classification.resnet import ResNet, ResnetBlock, conv1x1, conv3x
 
 # Load model
 model = ResNet(ResnetBlock, [2,2,2,2], k=2)
-model.load_state_dict(torch.load("test_acc-8102-epoch19.pth"))
+model.load_state_dict(torch.load("/app/utils/classification/test_acc-8102-epoch19.pth",map_location=device))
 model = model.to(device)
 
-total_wrong_labels = torch.LongTensor().cuda()
+total_wrong_labels = torch.LongTensor().cpu()
 model.eval()
 with torch.no_grad():
     for i, data in enumerate(test_loader):
