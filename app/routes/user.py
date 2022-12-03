@@ -76,4 +76,9 @@ def get_user_balance(current_user):
 @sales_bp.route("", methods=["GET"])
 @decode_auth_token
 def get_total_sales(current_user):
+    if run_query(select(Users.type).where(Users.id==current_user))==[{"type": "seller"}]:
+        query = run_query(select(Users.balance).where(Users.id==current_user))
+        return success_message(200, data=query)
+    else:
+        return error_message(403, "you're not a seller")
     pass

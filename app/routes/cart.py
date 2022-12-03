@@ -5,6 +5,8 @@ from sqlalchemy import (
     delete,
     insert,
     select,
+    alias,
+    func
 )
 from app.utils.query import run_query
 from app.utils.format_datetime import format_datetime
@@ -13,6 +15,7 @@ from app.utils.response import (
     error_message,
     success_message,
 )
+from app.models.category import Categories
 from app.models.user import Users
 from app.models.product import Products
 from app.models.cart import Carts
@@ -24,65 +27,41 @@ from . import cart_bp, shipping_price_bp
 @decode_auth_token
 def add_to_cart(current_user):
     # IMPLEMENT THIS
-    header = request.headers
     body = request.json
-    id_product = body.get("id")
+    product_id = body.get("id")
     quantity = body.get("quantity")
     size = body.get("size")
-    token = header.get("Authentication")
-
-    #TABLE INIT(tidak dipakai lagi)
-    '''
-    users = Table('users', MetaData(bind=get_engine()), autoload=True)
-    products = Table('products', MetaData(bind=get_engine), autoload=True)
-    carts = Table('carts', MetaData(bind=get_engine), autoload=True)
-    '''
-
-    #IDENFITY USER AND TOKEN
-    user = run_query(select(users.id).where(users.id == token))
-    if user == False:
-        return {"messege": "error, user is invalid"}, 400
+    
+    user_name = run_query(select(Users.name).where(Users.id==current_user))[0]["name"]
+    if product_id == None or quantity == None or size == None:
+        return error_message(400,"invalid product")
     else:
-        data = {
-            "id_cart": str(uuid.uuid4()),
-            "user_id": user,
-            "product_id": product_id,
-            "quantity": quantity,
-            "size": size
-        }
-
-
-    run_query(insert(carts).values(data),commit=True)
-    return {"message" : "item added to cart"}, 201
+        run_query(insert(Carts).values(id=uuid.uuid4(),user_id=current_user,product_id=product_id,size=size,quantity=quantity,create_at=format_datetime(),create_by=user_name),True)
+        return success_message(200,"item add to cart")
+    
 
 @cart_bp.route("", methods=["GET"])
 @decode_auth_token
 def get_user_carts(current_user):
-    pass
+    result = []
+    for x in run_query(select(Carts,Products).filter(Products.id==Carts.product_id).where(Carts.user_id==current_user)):
+        result.append({"id":x['id'],"details":{"quantity":x["quantity"],"size":x["size"]},"price":x["price"],"image":x["images_url"],"name":x["name"]})
+    return result
 
 @cart_bp.route("", methods=["DELETE"])
 @decode_auth_token
 def delete_cart_item(current_user):
     # IMPLEMENT THIS
-    header = request.headers
-    token = header.get("Authentication")
-
-    #TABLE INIT(tidak dipakai lagi)
-    '''
-    users = Table("users", MetaData(bind=get_engine()), autoload=True)
-    carts = Table("carts", MetaData(bind=get_engine()), autoload=True)
-    '''
-
-    user = run_query(select(users).where(users.c.token == token))
-
-    if len(user) == 0:
-        return {"message": "error, user is invalid"}, 400
-    else:
-        run_query(delete(carts).where(carts.id_cart == cart_id))
-        return {"message": "Cart deleted"}, 200
-
+    req = request.args
+    cart_id = req.get("cart_id")
+    if run_query(select(Carts.user_id).where(Carts.user_id==current_user))!=None:
+        run_query(delete(Carts).where(Carts.id==cart_id),True)
+        return success_message(201,"Cart deleted")
+    if run_query(select(Carts.id).where(Carts.id==cart_id))==None:
+        return error_message(400,"item not found")
+    
 # Get shipping price after push data to model ShippingPrice in endpoint add to cart
 @shipping_price_bp.route("", methods=["GET"])
 @decode_auth_token
 def get_shipping_price(current_user):
-    pass
+    return run_query(select(Carts.user_id, func.sum(Products.price*Carts.quantity)).filter(Carts.product_id==Products.id).where(Carts.user_id==current_user).group_by(Carts.user_id))

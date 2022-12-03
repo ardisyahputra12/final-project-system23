@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-mfrom . import Base
-from app.utils.format_datetime import format_datetime
-=======
 from . import Base
 from app.models.history import Histories
->>>>>>> f2aa20ea8497378289d897bf749f36aa0bd4d78c
 from sqlalchemy import (
     Column,
     String,
