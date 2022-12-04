@@ -32,6 +32,15 @@ def add_to_cart(current_user):
     quantity = body.get("quantity")
     size = body.get("size")
     
+    
+    run_query(f"DELETE FROM categories", True)
+    run_query(insert(Categories).values(id='cid1',title='baju',status='available',create_at=format_datetime(),create_by='admin'),True)
+    run_query(insert(Categories).values(id='cid2',title='celana',status='available',create_at=format_datetime(),create_by='admin'),True)
+    run_query(insert(Products).values(name='baju',price='200',condition='new',detail='detail',id='pid1',images_url='images_1',size='M',create_at=format_datetime(),create_by='admin',category_id='cid1'),True)
+    run_query(insert(Products).values(name='baju',price='250',condition='soft',detail='detail',id='pid2',images_url='images_2',size='XL',create_at=format_datetime(),create_by='admin',category_id='cid1'),True)
+    run_query(insert(Products).values(name='celana',price='150',condition='new',detail='detail',id='pid3',images_url='images_3',size='S',create_at=format_datetime(),create_by='admin',category_id='cid2'),True)
+    
+    
     user_name = run_query(select(Users.name).where(Users.id==current_user))[0]["name"]
     if product_id == None or quantity == None or size == None:
         return error_message(400,"invalid product")
@@ -64,4 +73,16 @@ def delete_cart_item(current_user):
 @shipping_price_bp.route("", methods=["GET"])
 @decode_auth_token
 def get_shipping_price(current_user):
-    return run_query(select(Carts.user_id, func.sum(Products.price*Carts.quantity)).filter(Carts.product_id==Products.id).where(Carts.user_id==current_user).group_by(Carts.user_id))
+    for x in run_query(select(Carts.user_id, func.sum(Products.price*Carts.quantity)).filter(Carts.product_id==Products.id).where(Carts.user_id==current_user).group_by(Carts.user_id)):
+        if x['sum_1'] < 200:
+            reguler = format(x['sum_1'])*(15/100)
+        elif x['sum_1'] >= 200:
+            reguler = format(x['sum_1']*(20/100))
+        if x['sum_1'] < 300:
+            next_day = format(x['sum_1'])*(20/100)
+        elif x['sum_1'] >= 300:
+            next_day = format(x['sum_1']*(25/100))
+            
+        result = [{"name":"reguler","price":reguler},{"name":"next day","price":next_day}]
+    
+    return result
