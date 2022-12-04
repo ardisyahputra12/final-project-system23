@@ -32,18 +32,12 @@ const NavbarBackground = styled.div`
   align-items: center;
 `;
 
-// const LeftNavbar = styled.div`
-//   float: left;
-// `;
 const LeftNavbar = styled.div`
-  display: flex;
-  justify-content: space-beetwen;
-  align-items: center;
-  width: 80%;
+  float: left;
 `;
 
 const RightNavbar = styled.div`
-  width: 20%;
+  float: right;
   font-size: 20px;
 `;
 
@@ -67,7 +61,6 @@ const CategoryLink = styled.a`
 const SearchGroup = styled(Input.Group)`
   display: inline-block !important;
   width: 50vw;
-  position: relative;
   top: -3vh;
 `;
 
