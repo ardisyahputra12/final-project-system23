@@ -10,7 +10,7 @@ from sqlalchemy import (
     select,
     and_,
 )
-from app.utils.classification.postprocessing import search_product
+# from app.utils.classification.postprocessing import search_product
 from app.utils.query import run_query
 from app.utils.format_datetime import format_datetime
 from app.utils.auth_token import decode_auth_token
@@ -208,9 +208,10 @@ def delete_product(current_user, product_id):
 @products_bp.route("/search_image", methods=["POST"])
 def search_product_by_image():
     body = request.get_json()
-    img_decode = Image.open(BytesIO(base64.b64decode(body["image"])))
+    # img_decode = Image.open(BytesIO(base64.b64decode(body["image"])))
 
-    img = search_product(img_decode)
+    # img = search_product(img_decode)
+    img = "T-shirt/top"
     query = run_query(select(Categories.id).where(Categories.title==img))[0]["id"]
 
     # val = [i["id"] for i in query]
