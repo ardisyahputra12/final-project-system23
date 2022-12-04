@@ -27,6 +27,9 @@ const NavbarBackground = styled.div`
   height: 10vh;
   box-shadow: 0 8px 8px -4px #0000000f;
   z-index: 10;
+  display: flex;
+  justify-content: space-beetwen;
+  align-items: center;
 `;
 
 // const LeftNavbar = styled.div`
@@ -36,10 +39,11 @@ const LeftNavbar = styled.div`
   display: flex;
   justify-content: space-beetwen;
   align-items: center;
+  width: 80%;
 `;
 
 const RightNavbar = styled.div`
-  float: right;
+  width: 20%;
   font-size: 20px;
 `;
 
