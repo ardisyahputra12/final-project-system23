@@ -11,7 +11,7 @@ from . import universal_bp
 
 @universal_bp.route("/<name>", methods=["GET"])
 def get_image(name):
-    image = run_query(select(Images.image).where(Images.name==name))[0]["image"]
+    image = run_query(select(Images.image).where(Images.title==name))[0]["image"]
     image = image.split(",")[1]
     title = uuid.uuid4()
 

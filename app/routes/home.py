@@ -1,11 +1,6 @@
 import uuid
 from flask import request
-from sqlalchemy import (
-    update,
-    delete,
-    insert,
-    select,
-)
+from sqlalchemy import select
 from app.utils.query import run_query
 from app.utils.response import (
     error_message,
@@ -19,14 +14,21 @@ from . import home_bp
 
 @home_bp.route("/banner", methods=["GET"])
 def get_image():
-    query = run_query(select(Products.id, Products.image, Products.title).where(Products.condition!="soft_delete").limit(5))
+    query = run_query(select(Images.id, Images.title).where(Images.title.like("banner%")).limit(5))
+    for val in query:
+        val["image"] = f"/image/{val['title']}"
     return success_message(200, data=query)
 
 
 @home_bp.route("/category", methods=["GET"])
 def get_category():
     query = run_query(select(Categories.id, Categories.title).where(Categories.status=="available"))
+
     for i in query:
         img = run_query(select(Products.image).where(Products.category_id==i["id"], Products.condition!="soft_delete").limit(1))
-        i["image"] = img[0]["image"]
-    return success_message(200, data=query)
+        if img != []:
+            i["image"] = img[0]["image"]
+    
+    val = [j for j in query if "image" in j]
+
+    return success_message(200, data=val)

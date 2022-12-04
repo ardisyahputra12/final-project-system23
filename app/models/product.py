@@ -15,6 +15,6 @@ class Products(Base, Histories):
     name = Column(String, nullable=False)
     price = Column(Integer, nullable=False)
     condition = Column(String, nullable=False)          # condition == new/used/soft_delete
-    images_url = Column(String, nullable=False)
-    detail = Column(String, nullable=False)
-    size = Column(String, nullable=True, server_default="['S', 'M', 'L', 'XL']")
+    image = Column(String, nullable=False)
+    product_detail = Column(String, nullable=True, server_default="None")
+    size = Column(String, nullable=True, server_default="S, M, L, XL")

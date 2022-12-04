@@ -30,17 +30,7 @@ def add_to_cart(current_user):
     body = request.json
     product_id = body.get("id")
     quantity = body.get("quantity")
-    size = body.get("size")
-    
-    
-    run_query(f"DELETE FROM categories", True)
-    run_query(insert(Categories).values(id='cid1',title='baju',status='available',create_at=format_datetime(),create_by='admin'),True)
-    run_query(insert(Categories).values(id='cid2',title='celana',status='available',create_at=format_datetime(),create_by='admin'),True)
-    run_query(insert(Products).values(name='baju',price='200',condition='new',detail='detail',id='pid1',images_url='images_1',size='M',create_at=format_datetime(),create_by='admin',category_id='cid1'),True)
-    run_query(insert(Products).values(name='baju',price='250',condition='soft',detail='detail',id='pid2',images_url='images_2',size='XL',create_at=format_datetime(),create_by='admin',category_id='cid1'),True)
-    run_query(insert(Products).values(name='celana',price='150',condition='new',detail='detail',id='pid3',images_url='images_3',size='S',create_at=format_datetime(),create_by='admin',category_id='cid2'),True)
-    
-    
+    size = body.get("size") 
     user_name = run_query(select(Users.name).where(Users.id==current_user))[0]["name"]
     if product_id == None or quantity == None or size == None:
         return error_message(400,"invalid product")
@@ -54,7 +44,7 @@ def add_to_cart(current_user):
 def get_user_carts(current_user):
     result = []
     for x in run_query(select(Carts,Products).filter(Products.id==Carts.product_id).where(Carts.user_id==current_user)):
-        result.append({"id":x['id'],"details":{"quantity":x["quantity"],"size":x["size"]},"price":x["price"],"image":x["images_url"],"name":x["name"]})
+        result.append({"id":x['id'],"details":{"quantity":x["quantity"],"size":x["size"]},"price":x["price"],"image":x["image"],"name":x["name"]})
     return result
 
 @cart_bp.route("", methods=["DELETE"])

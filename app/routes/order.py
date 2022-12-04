@@ -82,16 +82,10 @@ def user_orders(current_user):
     for x in run_query(select(Orders)):
         data = {"id":x['id'],"created_at":x['create_at'],"products":products_result,"shipping_method":x['shipping_method'],"shipping_address":x['shipping_address']}
         for x in run_query(select(Carts,Products).filter(Products.id==Carts.product_id).where(Carts.user_id==current_user)):
-            products_result.append({"id":x['id'],"details":{"quantity":x["quantity"],"size":x["size"]},"price":x["price"],"image":x["images_url"],"name":x["name"]})
+            products_result.append({"id":x['id'],"details":{"quantity":x["quantity"],"size":x["size"]},"price":x["price"],"image":x["image"],"name":x["title"]})
     return success_message(200,data)
     
 @orders_bp.route("", methods=["GET"])
 @decode_auth_token
 def get_orders(current_user):
     pass
-
-@order_bp.route("/delete", methods=["GET"])
-@decode_auth_token
-def user_del(current_user):
-    run_query(delete(Orders),True)
-    return success_message(200,'delete')
