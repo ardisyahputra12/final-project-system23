@@ -22,36 +22,16 @@ with torch.no_grad():
         wrong_labels = labels[test_correct == 0]
         total_wrong_labels = torch.cat((total_wrong_labels, wrong_labels))
 
-test_labels=data[1][:9]
-test_samples = data[0][:9]
-
-# Make predictions on test samples with model 0
-pred_probs= make_predictions(model=model, 
-                             data=test_samples)
-
-pred_classes = pred_probs.argmax(dim=1)
-
-# y_class =['T-shirt/top',
-#  'Trouser',
-#  'Pullover',
-#  'Dress',
-#  'Coat',
-#  'Sandal',
-#  'Shirt',
-#  'Sneaker',
-#  'Bag',
-#  'Ankle boot']
-
-y_class =[
-    'T-shirt/top',
-    'Trouser',
-    'Sandal',
-    'Shirt',
-    'Sneaker',
-    'Bag'
-]
-
-dummy = y_class[pred_classes[0]]
+y_class =['T-shirt/top',
+ 'Trouser',
+ 'Pullover',
+ 'Dress',
+ 'Coat',
+ 'Sandal',
+ 'Shirt',
+ 'Sneaker',
+ 'Bag',
+ 'Ankle boot']
 
 # test jurry test
 # function for search product by image

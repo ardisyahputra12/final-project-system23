@@ -29,8 +29,13 @@ const NavbarBackground = styled.div`
   z-index: 10;
 `;
 
+// const LeftNavbar = styled.div`
+//   float: left;
+// `;
 const LeftNavbar = styled.div`
-  float: left;
+  display: flex;
+  justify-content: space-beetwen;
+  align-items: center;
 `;
 
 const RightNavbar = styled.div`
@@ -109,33 +114,33 @@ function PublicNavbar(e) {
     onChange(info) {
       const { status } = info.file;
 
-      if (status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully.`);
+      // if (status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully.`);
 
 
-        // Encode the file using the FileReader API
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          // Use a regex to remove data url part
-          const base64String = reader.result
-            .replace('data:', '')
-            .replace(/^.+,/, '');
+      // Encode the file using the FileReader API
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // Use a regex to remove data url part
+        const base64String = reader.result
+          .replace('data:', '')
+          .replace(/^.+,/, '');
 
-          //console.log(base64String);
-          //setCookie('base64', base64String);
-          window.localStorage.setItem('base64', base64String);
-          router.push({
-            pathname: "/product",
-            query: { type: 'picture' }
-          })
-          // Logs wL2dvYWwgbW9yZ...
-        };
-        reader.readAsDataURL(info.fileList[0].originFileObj);
+        //console.log(base64String);
+        //setCookie('base64', base64String);
+        window.localStorage.setItem('base64', base64String);
+        router.push({
+          pathname: "/product",
+          query: { type: 'picture' }
+        })
+        // Logs wL2dvYWwgbW9yZ...
+      };
+      reader.readAsDataURL(info.fileList[0].originFileObj);
 
-        //console.log(info.fileList[0].originFileObj);
-      } else if (status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
+      //   //console.log(info.fileList[0].originFileObj);
+      // } else if (status === 'error') {
+      //   message.error(`${info.file.name} file upload failed.`);
+      // }
     },
 
     onDrop(e) {
@@ -166,7 +171,7 @@ function PublicNavbar(e) {
             */}
             {categoriesNavbar.map(category => {
               return (
-                <CategoryLink key={"CategoryNavbar"+category.id} href={`/product?cat=${category.id}`} target="_blank">{category.title}</CategoryLink>
+                <CategoryLink key={"CategoryNavbar" + category.id} href={`/product?cat=${category.id}`} target="_blank">{category.title}</CategoryLink>
               )
             })}
           </CategoriesBar>

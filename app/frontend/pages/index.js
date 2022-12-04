@@ -13,6 +13,7 @@ import { EndPoint, HomeBanner, HomeCategory } from "../SystemApis";
 //Styling components
 const CarouselPicture = styled.img`
   width: 87.5vw;
+  height: 80vh;
 `;
 
 function Home() {
@@ -53,7 +54,7 @@ function Home() {
 
         {homeBanners.map(banner => {
           return (
-            <div key={"CarouselPicture"+banner.id}>
+            <div key={"CarouselPicture" + banner.id}>
               <CarouselPicture src={EndPoint + banner.image} alt={banner.title} key={banner.id} />
             </div>
           )

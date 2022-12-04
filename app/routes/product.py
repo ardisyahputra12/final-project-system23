@@ -75,13 +75,13 @@ def create_product(current_user):
     elif run_query(select(Products.title, Products.category_id).distinct().where(and_(Products.title==body["product_name"], Products.category_id==body["category"], Products.condition=="soft_delete"))) == [{"title": body["product_name"], "category_id": body["category"]}]:
         user_name = run_query(select(Users.name).where(Users.id==current_user))[0]["name"]
         image_name = f"{body['product_name']}-{body['category']}-{body['condition']}-{uuid.uuid4()}.jpg"
-        run_query(insert(Images).values(id=uuid.uuid4(), name=image_name, image=body["images"], create_at=format_datetime(), create_by=user_name), True)
+        run_query(insert(Images).values(id=uuid.uuid4(), title=image_name, image=body["images"], create_at=format_datetime(), create_by=user_name), True)
         run_query(update(Products).values(price=body["price"], condition=body["condition"], image=f"/image/{image_name}", product_detail=body["description"], create_at=format_datetime(), create_by=user_name).where(and_(Products.title==body["product_name"], Products.category_id==body["category"], Products.condition=='soft_delete')), True)
         return success_message(201, msg=f"Product '{body['product_name']}' added")
     else:
         user_name = run_query(select(Users.name).where(Users.id==current_user))[0]["name"]
         image_name = f"{body['product_name']}-{body['category']}-{body['condition']}-{uuid.uuid4()}.jpg"
-        run_query(insert(Images).values(id=uuid.uuid4(), name=image_name, image=body["images"], create_at=format_datetime(), create_by=user_name), True)
+        run_query(insert(Images).values(id=uuid.uuid4(), title=image_name, image=body["images"], create_at=format_datetime(), create_by=user_name), True)
         run_query(insert(Products).values(id=uuid.uuid4(), category_id=body["category"], title=body["product_name"], price=body["price"], condition=body["condition"], image=f"/image/{image_name}", product_detail=body["description"], create_at=format_datetime(), create_by=user_name), True)
         return success_message(201, msg=f"Product '{body['product_name']}' added")
 
@@ -111,20 +111,20 @@ def get_product_list():
     elif (sort_by != "") and (sort_by != "Price z_a") and (sort_by != "Price a_z"):
         return error_message(400, "Params sort_by unknown, please use 'Price z_a' or 'Price a_z'")
     if product_name != "" and product_name != None:
-        where += f"title LIKE '%{product_name}%' and"
+        where += f"title LIKE '%{product_name}%' and "
     if category != [] and category != None:
         # if len(category) > 1:
         #     cat = ""
         #     for i in category:
         #         cat += (*cat, f"{i}")
-        #     where += f"category_id in ({cat}) and"
-        where += f"category_id = '{category[0]}' and"
+        #     where += f"category_id in ({cat}) and "
+        where += f"category_id = '{category[0]}' and "
     if condition != [] and condition != None:
         # for con in condition:
-        where += f"condition='{condition[0]}' and"
+        where += f"condition='{condition[0]}' and "
     if price != "" and price != None:
         price_val = price.split[","]
-        where += f"price>='{price_val[0]}' and price<='{price_val[1]}' and"
+        where += f"price>='{price_val[0]}' and price<='{price_val[1]}' and "
 
     query = run_query(
         f"""SELECT id, image, title, price
@@ -184,7 +184,7 @@ def update_product(current_user):
     else:
         user_name = run_query(select(Users.name).where(Users.id==current_user))[0]["name"]
         image_name = f"{body['product_name']}-{body['category']}-{body['condition']}-{uuid.uuid4()}.jpg"
-        run_query(insert(Images).values(id=uuid.uuid4(), name=image_name, image=body["images"], create_at=format_datetime(), create_by=user_name), True)
+        run_query(insert(Images).values(id=uuid.uuid4(), title=image_name, image=body["images"], create_at=format_datetime(), create_by=user_name), True)
         run_query(update(Products).values(id=body["product_id"], category_id=body["category"], title=body["product_name"], price=body["price"], condition=body["condition"], image=f"/image/{image_name}", product_detail=body["description"], update_at=format_datetime(), update_by=user_name).where(and_(Products.id==body["product_id"], Products.condition!="soft_delete")), True)
         return success_message(200, msg="Product updated")
 
@@ -207,48 +207,31 @@ def delete_product(current_user, product_id):
 
 @products_bp.route("/search_image", methods=["POST"])
 def search_product_by_image():
-    # from PIL import Image
-
-    # images = Image.open("data\Jury Test Set\mnist_58.png")
-
     body = request.get_json()
-    # user_name = run_query(select(Users.name).where(Users.id==current_user))[0]["name"]
-    # image_name = f"image-search-{uuid.uuid4()}.jpg"
-
-    # run_query(insert(Images).values(id=uuid.uuid4(), name=image_name, image=body["image"], create_at=format_datetime(), create_by=user_name), True)
-
-    # if ("image" not in body) or (body["image"] == ""): return error_message(400, "Can't search image, image is empty!")
-    # query = run_query(f"SELECT DISTINCT category_id FROM products WHERE image LIKE '%{body['image']}%'")
     img_decode = Image.open(BytesIO(base64.b64decode(body["image"])))
+
     img = search_product(img_decode)
-    query = run_query(select(Categories.id).where(Categories.title==img))
+    query = run_query(select(Categories.id).where(Categories.title==img))[0]["id"]
+
+    # val = [i["id"] for i in query]
     return success_message(200, key="category_id", data=query)
 
 
 @products_bp.route("/<product_id>", methods=["GET"])
 def get_product_details(product_id):
-    if (run_query(select(Products.id).where(Products.id==product_id, Products.condition!='soft_delete')) == []) or (run_query(select(Products.condition).where(Products.id==product_id)) == [{"condition": "soft_delete"}]):
-        return error_message(404, "Product not found")
-    elif [{"id": product_id}] == run_query(select(Products.id).where(Products.id==product_id)):
-        query = run_query(select(Products.id, Products.title, Products.size, Products.product_detail, Products.price, Products.image).where(Products.id==product_id))
-        return success_message(200, data=query)
-    else: return error_message(404, "Not Found")
-
-    # # if (run_query(select(Products.id).where(Products.id==product_id, Products.condition!='soft_delete')) == []) or (run_query(select(Products.condition).where(Products.id==product_id)) == [{"condition": "soft_delete"}]):
-    # #     return error_message(404, "Product not found")
-    # if [{"id": product_id}] == run_query(select(Products.id).where(Products.id==product_id)):
-    #     query = run_query(select(Products.id, Products.title, Products.size, Products.product_detail, Products.price, Products.image).where(Products.id==product_id))
-    #     query[0]["images_url"] = query[0].pop("image")
-    #     query[0]["images_url"] = [query[0]["images_url"]]
-    #     return success_message(200, data=query)
-    # else:
-    #     return success_message(200, data=[
-    #         {
-    #             "id": "",
-    #             "images_url": [],
-    #             "price": 0,
-    #             "product_detail": "",
-    #             "size": "",
-    #             "title": ""
-    #         }
-    #     ])
+    query = run_query(select(Products.id, Products.title, Products.size, Products.product_detail, Products.price, Products.image).where(Products.id==product_id))
+    if query != []:
+        query[0]["images_url"] = query[0].pop("image")
+        query[0]["images_url"] = [query[0]["images_url"]]
+        query[0]["size"] = query[0]["size"].split(",")
+        return success_message(200, data=query[0])
+    else:
+        return success_message(200, data={
+                "id": "",
+                "images_url": [],
+                "price": 0,
+                "product_detail": "",
+                "size": [],
+                "title": ""
+            }
+        )

@@ -17,4 +17,4 @@ class Products(Base, Histories):
     condition = Column(String, nullable=False)          # condition == new/used/soft_delete
     image = Column(String, nullable=False)
     product_detail = Column(String, nullable=True, server_default="None")
-    size = Column(String, nullable=True, server_default="['S', 'M', 'L', 'XL']")
+    size = Column(String, nullable=True, server_default="S, M, L, XL")

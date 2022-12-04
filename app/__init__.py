@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from app.utils.handle_error import ErrorHandler
-from app.admin.seller import admin_seller
+from app.data import dummy
 from app.models import get_engine
 import app.models as models
 import app.routes as routes
@@ -40,4 +40,4 @@ def create_app():
 
 
 create_app()
-admin_seller()
+dummy()
