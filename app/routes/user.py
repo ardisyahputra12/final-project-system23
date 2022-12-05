@@ -15,8 +15,6 @@ from app.utils.response import (
 )
 from app.models.user import Users
 from app.models.order import Orders
-from app.models.cart import Carts
-from app.models.product import Products
 from . import user_bp, sales_bp
 
 
@@ -87,12 +85,11 @@ def get_user_balance(current_user):
 @user_bp.route("/order", methods=["GET"])
 @decode_auth_token
 def user_orders(current_user):
-    products_result=[]
-    for x in run_query(select(Orders)):
-        for x in run_query(select(Carts,Products.image,Products.price,Products.name,Products.title).filter(Products.id==Carts.product_id).where(Carts.user_id==current_user)):
-            products_result.append({"id":x['id'],"details":{"quantity":x["quantity"],"size":x["size"]},"price":x["price"],"image":x["image"],"name":x["title"]})
-        data = {"id":x['id'],"created_at":x['create_at'],"products":products_result,"shipping_method":x['shipping_method'],"shipping_address":x['shipping_address']}
-    return success_message(200,data)
+    data = []
+    for y in run_query(select(Orders).where(Orders.user_id==current_user).group_by(Orders.id)):
+        data.append({"id":y['id'],"created_at":y['create_at'],"products":y["products"],"shipping_method":y['shipping_method'],"shipping_address":y['shipping_address']})
+    return success_message(200,data=data)
+
 
 @sales_bp.route("", methods=["GET"])
 @decode_auth_token
