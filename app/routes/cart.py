@@ -43,8 +43,8 @@ def add_to_cart(current_user):
 @decode_auth_token
 def get_user_carts(current_user):
     result = []
-    for x in run_query(select(Carts,Products).filter(Products.id==Carts.product_id).where(Carts.user_id==current_user)):
-        result.append({"id":x['id'],"details":{"quantity":x["quantity"],"size":x["size"]},"price":x["price"],"image":x["image"],"name":x["name"]})
+    for x in run_query(select(Carts.id,Carts.quantity,Carts.size,Products).filter(Products.id==Carts.product_id).where(Carts.user_id==current_user)):
+        result.append({"id":x['id'],"details":{"quantity":x["quantity"],"size":x["size"]},"price":x["price"],"image":x["image"],"name":x["title"]})
     return result
 
 @cart_bp.route("", methods=["DELETE"])

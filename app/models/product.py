@@ -12,7 +12,7 @@ class Products(Base, Histories):
     __tablename__ = 'products'
     id = Column(String, primary_key=True)
     category_id = Column(String, ForeignKey('categories.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
-    name = Column(String, nullable=False)
+    title = Column(String, nullable=False)
     price = Column(Integer, nullable=False)
     condition = Column(String, nullable=False)          # condition == new/used/soft_delete
     image = Column(String, nullable=False)

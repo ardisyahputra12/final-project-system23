@@ -15,5 +15,6 @@ class Orders(Base, Histories):
     user_id = Column(String, ForeignKey('users.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
     shipping_method = Column(String, nullable=False)            # shipping_method = "Same day" atau "Regular"/"Next day"
     shipping_address = Column(JSON, nullable=False)
+    # products = Column(JSON, nullable=True)
     status = Column(String, nullable=True, server_default="waiting")     # status = waiting/processed/delivered/arrived
     total_price = Column(Integer, nullable=False)
