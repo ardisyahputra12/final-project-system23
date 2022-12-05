@@ -134,7 +134,7 @@ function DetailProductPage() {
                     .then(response => response.json())
                     .then(data => {
                         //console.log(data);
-                        if (data.message.indexOf("success") == -1) {
+                        if (data.message.indexOf("success") == -1 || data.message.indexOf("add") == -1) {
                             notification["error"]({
                                 message: "Add to cart Failed",
                                 description: data.message

@@ -143,7 +143,7 @@ function ProductPage() {
 
         //SET PER PAGE
         if (routerQuery['perPage']) {
-            setPerPage(routerQuery['perPage']);
+            //setPerPage(routerQuery['perPage']);
             perPageTemp = routerQuery['perPage'];
         }
 
@@ -174,48 +174,56 @@ function ProductPage() {
 
             var prcs = ""
             if (routerQuery['prcStart']) {
-                prcs = "&harga=" + routerQuery['prcStart'] + "," + routerQuery['prcEnd'];
+                prcs = "&price=" + routerQuery['prcStart'] + "," + routerQuery['prcEnd'];
             }
 
             var kondisis = ""
             if (routerQuery['cond']) {
-                prcs = "&kondisi=" + routerQuery['cond'];
+                kondisis = "&condition=" + routerQuery['cond'];
             }
 
-            fetch(EndPoint + ProductsList +
-                "?page=" + currPageTemp +
-                "&page_size=" + perPageTemp +
-                "&sort_by=" + sortValue +
-                cats +
-                prcs +
-                kondisis)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.data.length > 0) {
-                        setItems(data.data);
-                        setTotalResult(data.total_rows);
-                        if (data.total_rows < perPage) {
-                            perPageTemp = data.total_rows;
+            var pName = ""
+            if (routerQuery['search']) {
+                pName = "&product_name=" + routerQuery['search'];
+            }
+
+            if(routerQuery['search'] || routerQuery['cond'] ||routerQuery['prcStart'] || routerQuery['prcEnd'] || routerQuery['cat']){
+                fetch(EndPoint + ProductsList +
+                    "?page=" + currPageTemp +
+                    "&page_size=" + 50 +
+                    "&sort_by=" + sortValue +
+                    pName +
+                    cats +
+                    prcs +
+                    kondisis)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.data.length > 0) {
+                            setItems(data.data);
+                            setTotalResult(data.total_rows);
+                            if (data.total_rows < perPage) {
+                                perPageTemp = data.total_rows;
+                            }
+                            //console.log(data.message);
+                            //console.log(perPage);
+                            //console.log(data.total_rows);
+                            //console.log(perPageTemp);
+                            //console.log(currPageTemp);
+                            //setPerPage(50);
+                            setCurrResult(perPageTemp * currPageTemp);
                         }
-                        //console.log(data.message);
-                        //console.log(perPage);
-                        //console.log(data.total_rows);
-                        //console.log(perPageTemp);
-                        //console.log(currPageTemp);
-                        setPerPage(perPageTemp);
-                        setCurrResult(perPageTemp * currPageTemp);
-                    }
-                    //setCategoryOptions(data.data)
-                });
+                        //setCategoryOptions(data.data)
+                    });
+            }
         } else {
             var prcs = ""
             if (routerQuery['prcStart']) {
-                prcs = "&harga=" + routerQuery['prcStart'] + "," + routerQuery['prcEnd'];
+                prcs = "&price=" + routerQuery['prcStart'] + "," + routerQuery['prcEnd'];
             }
 
             var kondisis = ""
             if (routerQuery['cond']) {
-                prcs = "&kondisi=" + routerQuery['cond'];
+                prcs = "&condition=" + routerQuery['cond'];
             }
 
             fetch(EndPoint + ProductsListByImage, {
@@ -230,36 +238,38 @@ function ProductPage() {
             })
                 .then(response => response.json())
                 .then(data => {
-                    cats = "&category=" + data.category;
-
-                    fetch(EndPoint + ProductsList +
-                        "?page=" + currPageTemp +
-                        "&page_size=" + perPageTemp +
-                        "&sort_by=" + sortValue +
-                        cats +
-                        prcs +
-                        kondisis)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.data.length > 0) {
-                                setItems(data.data);
-                                setTotalResult(data.total_rows);
-                                if (data.total_rows < perPage) {
-                                    perPageTemp = data.total_rows;
+                    if(data.category){
+                        cats = "&category=" + data.category;
+    
+                        fetch(EndPoint + ProductsList +
+                            "?page=" + currPageTemp +
+                            "&page_size=" + 50 +
+                            "&sort_by=" + sortValue +
+                            cats +
+                            prcs +
+                            kondisis)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.data.length > 0) {
+                                    setItems(data.data);
+                                    setTotalResult(data.total_rows);
+                                    if (data.total_rows < perPage) {
+                                        perPageTemp = data.total_rows;
+                                    }
+                                    //setPerPage(perPageTemp);
+                                    setCurrResult(perPageTemp * currPageTemp);
                                 }
-                                setPerPage(perPageTemp);
-                                setCurrResult(perPageTemp * currPageTemp);
-                            }
-                            //setCategoryOptions(data.data)
-                        });
+                                //setCategoryOptions(data.data)
+                            });
+                    }
                 });
         }
 
 
-    }, [router]);
+    }, [router.query]);
 
     const onShowSizeChangeHandler = (currentPage, pageSize) => {
-        setPerPage(pageSize);
+        //setPerPage(pageSize);
         setCurrResult(currentPage * pageSize);
 
         router.query["perPage"] = pageSize;
@@ -330,7 +340,7 @@ function ProductPage() {
                     })
                         .then(response => response.json())
                         .then(data => {
-                            var cats = "&category=" + data.category;
+                            var cats = "&category=" + data.category_id;
 
                             fetch(EndPoint + ProductsList +
                                 "?page=" + currPage +
@@ -349,7 +359,7 @@ function ProductPage() {
                                         if (data.total_rows < perPage) {
                                             perPageTemp = data.total_rows;
                                         }
-                                        setPerPage(perPageTemp);
+                                        //setPerPage(perPageTemp);
                                         setCurrResult(perPageTemp * currPage);
                                     }
                                     //setCategoryOptions(data.data)
@@ -448,7 +458,7 @@ function ProductPage() {
                                         pId={item.id}
                                         name={item.title}
                                         image={EndPoint + item.image}
-                                        price={"Rp. " + formatNumberCurrency(item.price)}
+                                        price={formatNumberCurrency(item.price)}
                                     />
                                 );
                             })}
@@ -462,8 +472,6 @@ function ProductPage() {
                         current={currPage}
                         total={totalResult}
                         pageSize={perPage}
-                        onChange={onPaginationChangeHandler}
-                        onShowSizeChange={onShowSizeChangeHandler}
                     />
                 </PaginationCol>
             </Row>

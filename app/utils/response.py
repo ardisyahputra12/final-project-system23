@@ -6,7 +6,7 @@ def error_message(sts: int, msg: str):
     """
     return {"message": msg}, sts
 
-def success_message(sts: int, data: str = None, msg: str = None, msg_a: str = None, key: str = None, tkn: str = None, row: bool = False):
+def success_message(sts: int, data = None, msg = None, msg_a = None, key: str = None, tkn: str = None, row: bool = False):
     """
     This function is for handle success message.\n
     sts => status code,\n
