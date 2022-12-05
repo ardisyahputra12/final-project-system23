@@ -14,6 +14,7 @@ from app.utils.response import (
     success_message,
 )
 from app.models.user import Users
+from app.models.order import Orders
 from . import user_bp, sales_bp
 
 
@@ -79,6 +80,15 @@ def top_up_balance(current_user):
 def get_user_balance(current_user):
     query = run_query(select(Users.balance).where(Users.id==current_user))[0]
     return success_message(200, data=query)
+
+
+@user_bp.route("/order", methods=["GET"])
+@decode_auth_token
+def user_orders(current_user):
+    data = []
+    for y in run_query(select(Orders).group_by(Orders.id)):
+        data.append({"id":y['id'],"created_at":y['create_at'],"products":y["products"],"shipping_method":y['shipping_method'],"shipping_address":y['shipping_address']})
+    return success_message(200,data=data)
 
 
 @sales_bp.route("", methods=["GET"])

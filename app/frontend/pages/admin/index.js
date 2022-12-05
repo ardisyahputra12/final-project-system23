@@ -26,12 +26,16 @@ function AdminHomepage() {
             });
     }, []);
 
+    const formatNumberCurrency = x => {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     return (
         <AdminLayout
             title="Homepage">
-            <Card style={{textAlign: "center"}}>
+            <Card style={{ textAlign: "center" }}>
                 <Title level={2}>Your Total Sales</Title>
-                <Title level={1}>{salesTotal}</Title>
+                <Title level={1}>Rp. {formatNumberCurrency(salesTotal)}</Title>
             </Card>
         </AdminLayout>
     );
