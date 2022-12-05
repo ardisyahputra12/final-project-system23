@@ -37,16 +37,14 @@ def create_order(current_user):
                     return error_message(401,"your balance is not enough")
                 else:
                     result_balance= int(run_query(select(Users.balance).where(Users.id==current_user))[0]['balance'])-total
-                    # result_balance_admin= int(run_query(select(Users.balance).where(Users.is_admin==True))[0]['balance'])+total
                     # run_query(update(Carts).values(status='soft_delete'),True)
                     products_result=[]
                     for x in run_query(select(Orders)):
                         for x in run_query(select(Carts,Products.image,Products.price,Products.title).filter(Products.id==Carts.product_id).where(Carts.user_id==current_user)):
                             products_result.append({"id":x['id'],"details":{"quantity":x["quantity"],"size":x["size"]},"price":x["price"],"image":x["image"],"name":x["title"]})
                     # run_query(insert(Orders).values(products=products_result),True)
-                    run_query(insert(Orders).values(products= products_result,id=uuid.uuid4(),user_id=current_user,shipping_method=method,shipping_address=address,total_price=format(total),create_at=format_datetime(),create_by=user_name),True)
+                    run_query(insert(Orders).values(products= f"{products_result}".removeprefix("[").removesuffix("]"),id=uuid.uuid4(),user_id=current_user,shipping_method=method,shipping_address=address,total_price=format(total),create_at=format_datetime(),create_by=user_name),True)
                     run_query(update(Users).values(balance=result_balance).where(Users.id==current_user),True)
-                    # run_query(update(Users).values(balance=result_balance_admin).where(Users.is_admin==True))
                     return success_message(200,"order success")
             elif x['sum_1'] >= 200:
                 total = int(x['sum_1']*(20/100))
@@ -54,16 +52,14 @@ def create_order(current_user):
                     return error_message(401,"your balance is not enough")
                 else:
                     result_balance= int(run_query(select(Users.balance).where(Users.id==current_user))[0]['balance'])-total
-                    # result_balance_admin= int(run_query(select(Users.balance).where(Users.is_admin==True))[0]['balance'])+total
                     # run_query(update(Carts).values(status='soft_delete'),True)
                     products_result=[]
                     for x in run_query(select(Orders)):
                         for x in run_query(select(Carts,Products.image,Products.price,Products.title).filter(Products.id==Carts.product_id).where(Carts.user_id==current_user)):
                             products_result.append({"id":x['id'],"details":{"quantity":x["quantity"],"size":x["size"]},"price":x["price"],"image":x["image"],"name":x["title"]})
                     # run_query(insert(Orders).values(products=products_result),True)
-                    run_query(insert(Orders).values(products= products_result,id=uuid.uuid4(),user_id=current_user,shipping_method=method,shipping_address=address,total_price=format(total),create_at=format_datetime(),create_by=user_name),True)
+                    run_query(insert(Orders).values(products= f"{products_result}".removeprefix("[").removesuffix("]"),id=uuid.uuid4(),user_id=current_user,shipping_method=method,shipping_address=address,total_price=format(total),create_at=format_datetime(),create_by=user_name),True)
                     run_query(update(Users).values(balance=result_balance).where(Users.id==current_user),True)
-                    # run_query(update(Users).values(balance=result_balance_admin).where(Users.is_admin==True))
                     return success_message(200,"order success")
         elif method == "next day":
             if x['sum_1'] < 300:
@@ -72,16 +68,14 @@ def create_order(current_user):
                     return error_message(401,"your balance is not enough")
                 else:
                     result_balance= int(run_query(select(Users.balance).where(Users.id==current_user))[0]['balance'])-total
-                    # result_balance_admin= int(run_query(select(Users.balance).where(Users.is_admin==True))[0]['balance'])+total
                     # run_query(update(Carts).values(status='soft_delete'),True)
                     products_result=[]
                     for x in run_query(select(Orders)):
                         for x in run_query(select(Carts,Products.image,Products.price,Products.title).filter(Products.id==Carts.product_id).where(Carts.user_id==current_user)):
                             products_result.append({"id":x['id'],"details":{"quantity":x["quantity"],"size":x["size"]},"price":x["price"],"image":x["image"],"name":x["title"]})
                     # run_query(insert(Orders).values(products=products_result),True)
-                    run_query(insert(Orders).values(products= products_result,id=uuid.uuid4(),user_id=current_user,shipping_method=method,shipping_address=address,total_price=format(total),create_at=format_datetime(),create_by=user_name),True)
+                    run_query(insert(Orders).values(products= f"{products_result}".removeprefix("[").removesuffix("]"),id=uuid.uuid4(),user_id=current_user,shipping_method=method,shipping_address=address,total_price=format(total),create_at=format_datetime(),create_by=user_name),True)
                     run_query(update(Users).values(balance=result_balance).where(Users.id==current_user),True)
-                    # run_query(update(Users).values(balance=result_balance_admin).where(Users.is_admin==True))
                     return success_message(200,"order success")
             elif x['sum_1'] >= 300:
                 total = int(x['sum_1']*(25/10))
@@ -89,16 +83,14 @@ def create_order(current_user):
                     return error_message(401,"your balance is not enough")
                 else:
                     result_balance= int(run_query(select(Users.balance).where(Users.id==current_user))[0]['balance'])-total
-                    # result_balance_admin= int(run_query(select(Users.balance).where(Users.is_admin==True))[0]['balance'])+total
                     # run_query(update(Carts).values(status='soft_delete'),True)
                     products_result=[]
                     for x in run_query(select(Orders)):
                         for x in run_query(select(Carts,Products.image,Products.price,Products.title).filter(Products.id==Carts.product_id).where(Carts.user_id==current_user)):
                             products_result.append({"id":x['id'],"details":{"quantity":x["quantity"],"size":x["size"]},"price":x["price"],"image":x["image"],"name":x["title"]})
                     # run_query(insert(Orders).values(products=products_result),True)
-                    run_query(insert(Orders).values(products= products_result,id=uuid.uuid4(),user_id=current_user,shipping_method=method,shipping_address=address,total_price=format(total),create_at=format_datetime(),create_by=user_name),True)
+                    run_query(insert(Orders).values(products= f"{products_result}".removeprefix("[").removesuffix("]"),id=uuid.uuid4(),user_id=current_user,shipping_method=method,shipping_address=address,total_price=format(total),create_at=format_datetime(),create_by=user_name),True)
                     run_query(update(Users).values(balance=result_balance).where(Users.id==current_user),True)
-                    # run_query(update(Users).values(balance=result_balance_admin).where(Users.is_admin==True))
                     return success_message(200,"order success")
 
 
@@ -112,5 +104,5 @@ def get_orders(current_user):
             create_at = z['create_at']
             for c in run_query(select(Carts.user_id, func.sum(Products.price*Carts.quantity)).filter(Carts.product_id==Products.id).where(Carts.user_id==x['id']).group_by(Carts.user_id)):
                 total = c['sum_1']
-        data.append({"id":order_id,"user_name":x['name'],"create_at":create_at,"user_id":x['id'],"user_email":x['email'],"total":total})
+        data.append({"id":order_id,"user_name":x['name'],"create_at":create_at,"user_id":x['id'],"user_email":x['email'],"total":total,})
     return success_message(200,data)

@@ -6,7 +6,7 @@
 
 ## **Structure project**
 
-![structure-project](./images/structure-project.png)
+![structure-project](./images/struktur-project.png)
 
 ## **ERD**
 
