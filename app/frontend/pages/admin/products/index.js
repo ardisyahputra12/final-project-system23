@@ -79,7 +79,9 @@ function AdminProducts() {
   ];
 
   useEffect(() => {
-    fetch(EndPoint + ProductsList, {
+    fetch(EndPoint + ProductsList +
+      "?page_size=50000" +
+      "&page=1", {
       headers: {
         'Authentication': getCookie("adminToken")
       }

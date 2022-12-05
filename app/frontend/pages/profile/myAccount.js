@@ -43,9 +43,11 @@ function MyAccountPage() {
         })
             .then(response => response.json())
             .then(data => {
-                setUserEmail(data.data.email);
-                setUserName(data.data.name);
-                setUserPhone(data.data.phone_number);
+                if(data.data){
+                    setUserEmail(data.data.email);
+                    setUserName(data.data.name);
+                    setUserPhone(data.data.phone_number);
+                }
             });
 
         fetch(EndPoint + UserShippingAddress, {
@@ -55,12 +57,14 @@ function MyAccountPage() {
         })
             .then(response => response.json())
             .then(data => {
-                form.setFieldsValue({
-                    name: data.data.name,
-                    phone: data.data.phone_number,
-                    address: data.data.address,
-                    city: data.data.city
-                });
+                if(data.data){
+                    form.setFieldsValue({
+                        name: data.data.name,
+                        phone: data.data.phone_number,
+                        address: data.data.address,
+                        city: data.data.city
+                    });
+                }
             });
 
 

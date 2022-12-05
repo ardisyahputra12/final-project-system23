@@ -27,26 +27,34 @@ const NavbarBackground = styled.div`
   height: 10vh;
   box-shadow: 0 8px 8px -4px #0000000f;
   z-index: 10;
+  display: flex;
+  align-items: center;
 `;
 
 const LeftNavbar = styled.div`
-  float: left;
+  width: 90%;
+  display: flex;
+  align-items: center;
 `;
 
 const RightNavbar = styled.div`
-  float: right;
+  width: 10%;
   font-size: 20px;
+  display: flex;
+  place-content: flex-end;
+  justify-content: space-evenly !important;
 `;
 
 const ImageBox = styled.div`
   margin-left: 2vw;
-  display: inline-block;
+  display: block;
+  height: 50px;
 `;
 
 const CategoriesBar = styled.div`
-  display: inline-block;
-  position: relative;
+  display: block;
   top: -2vh;
+  margin: 0 2vh;
 `;
 
 const CategoryLink = styled.a`
@@ -56,10 +64,8 @@ const CategoryLink = styled.a`
 `;
 
 const SearchGroup = styled(Input.Group)`
-  display: inline-block !important;
+  display: block;
   width: 50vw;
-  position: relative;
-  top: -3vh;
 `;
 
 const SearchInput = styled(Input.Search)`

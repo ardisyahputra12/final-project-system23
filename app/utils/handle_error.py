@@ -6,4 +6,4 @@ ErrorHandler = Blueprint('ErrorHandler', __name__)
 
 # @ErrorHandler.app_errorhandler(Exception)
 # def handle_exception(e):
-#     return error_message(str(e).split()[0], str(e))
+    # return error_message(str(e).split()[0], str(e))

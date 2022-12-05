@@ -68,11 +68,13 @@ function Checkout() {
         })
             .then(response => response.json())
             .then(data => {
-                setShippingName(data.data.name);
-                setShippingPhone(data.data.phone_number);
-                setShippingAddress(data.data.address + ", " + data.data.city);
-                setShippingSelfAddress(data.data.address);
-                setShippingCity(data.data.city);
+                if(data.data){
+                    setShippingName(data.data.name);
+                    setShippingPhone(data.data.phone_number);
+                    setShippingAddress(data.data.address + ", " + data.data.city);
+                    setShippingSelfAddress(data.data.address);
+                    setShippingCity(data.data.city);
+                }
             });
 
         fetch(EndPoint + ShippingPrice, {
@@ -82,7 +84,9 @@ function Checkout() {
         })
             .then(response => response.json())
             .then(data => {
-                setShippingMethods(data.data);
+                if(data.data){
+                    setShippingMethods(data.data);
+                }
             });
 
         fetch(EndPoint + UserBalances, {

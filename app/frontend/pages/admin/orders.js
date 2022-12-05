@@ -11,7 +11,9 @@ function AdminOrderPage() {
     const [tableData, setTableData] = useState([]);
 
     useEffect(() => {
-        fetch(EndPoint + GetOrderApi, {
+        fetch(EndPoint + GetOrderApi +
+            "?page_size=50000" +
+            "&page=1", {
             headers: {
                 'Authentication': getCookie("adminToken")
             }

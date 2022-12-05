@@ -18,6 +18,10 @@ def get_image(image_name):
 def banner_dummy():
     data = [
         {
+            "image": get_image("banner4-fashion-sale.png"),
+            "title": "banner4-fashion-sale",
+        },
+        {
             "image": get_image("banner3-fashion-flash.png"),
             "title": "banner3-fashion-flash",
         },
@@ -25,13 +29,10 @@ def banner_dummy():
             "image": get_image("banner5-big-sale.png"),
             "title": "banner5-big-sale",
         },
+        
         {
             "image": get_image("banner1-shein-deals.png"),
             "title": "banner1-shein-deals",
-        },
-        {
-            "image": get_image("banner4-fashion-sale.png"),
-            "title": "banner4-fashion-sale",
         },
         {
             "image": get_image("banner2-mid-season-sale.png"),
