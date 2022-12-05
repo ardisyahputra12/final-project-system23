@@ -11,13 +11,14 @@ const CardPicture = styled.div`
 `;
 
 const CategoryPic = styled.img`
-    width: 30vw;
+    width: 20vw;
+    height: 30vh;
 `;
 
 function CategoryCard(props) {
     return (
         <Card>
-            <CardTitle>{props.title}</CardTitle><br/>
+            <CardTitle>{props.title}</CardTitle><br />
             <CardPicture><CategoryPic src={props.image} alt={props.title} /></CardPicture>
         </Card>
     );

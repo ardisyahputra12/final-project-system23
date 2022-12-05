@@ -90,41 +90,48 @@ def create_product(current_user):
 def get_product_list():
     params = request.args
     page = params.get("page", default=1, type=int)
-    page_size = params.get("page_size", default=20, type=int)
+    page_size = params.get("page_size", default=50, type=int)
     sort_by = params.get("sort_by", default="Price a_z", type=str)
-    category = params.getlist("category", type=str)
-    # prcStart = params.get("prcStart", default=0, type=int)
-    # prcEnd = params.get("prcEnd", default=1000000, type=int)
+    category = params.get("category")
     price = params.get("price")
-    condition = params.getlist("condition", type=str)
+    condition = params.get("condition", type=str)
     product_name = params.get("product_name", type=str)
 
-    # if run_query(select(Products).where(Products.condition != "soft_delete")) == []:
-    #     return success_message(200, data="Product is empty")
-    # if (page != None and page < 1) or (page_size != None and page_size < 1) or (price != None and price < 1):
-    #     return error_message(400, "Params Page, page size, and price must be positive numbers")
-    # else:
     sort = 'ASC'
     where = ""
 
     if sort_by == "Price z_a": sort = 'DESC'
     elif (sort_by != "") and (sort_by != "Price z_a") and (sort_by != "Price a_z"):
         return error_message(400, "Params sort_by unknown, please use 'Price z_a' or 'Price a_z'")
+
     if product_name != "" and product_name != None:
         where += f"title LIKE '%{product_name}%' and "
-    if category != [] and category != None:
-        # if len(category) > 1:
-        #     cat = ""
-        #     for i in category:
-        #         cat += (*cat, f"{i}")
-        #     where += f"category_id in ({cat}) and "
-        where += f"category_id = '{category[0]}' and "
-    if condition != [] and condition != None:
-        # for con in condition:
-        where += f"condition='{condition[0]}' and "
+
+    if category != "" and category != None:
+        cat_arr = category.split(",")
+        cat = ""
+        if len(cat_arr) > 1:
+            for i in cat_arr:
+                cat += f"'{i}',"
+            where += f"category_id IN ({cat.removesuffix(',')}) and "
+        else:
+            where += f"category_id = '{category}' and "
+        cat = ""
+
+    if condition != "" and condition != None:
+        cond_arr = condition.split(",")
+        cond = ""
+        if len(cond_arr) > 1:
+            for i in cond_arr:
+                cond += f"'{i}',"
+            where += f"condition IN ({cond.removesuffix(',')}) and "
+        else:
+            where += f"condition = '{condition}' and "
+        cond = ""
+
     if price != "" and price != None:
-        price_val = price.split[","]
-        where += f"price>='{price_val[0]}' and price<='{price_val[1]}' and "
+        price_arr = price.split(",")
+        where += f"price>='{price_arr[0]}' and price<='{price_arr[1]}' and "
 
     query = run_query(
         f"""SELECT id, image, title, price

@@ -15,7 +15,7 @@ const FooterBackground = styled.div`
   background-color: #529EBF;
   color: black;
   width: 100vw;
-  height: 40vh;
+  height: 45vh;
 `;
 
 const LeftFooter = styled.div`
