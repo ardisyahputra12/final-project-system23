@@ -41,10 +41,12 @@ def create_order(current_user):
             else:
                 products_result=[]
                 result_balance = run_query(select(Users.balance).where(Users.id==current_user))[0]['balance']-price_all
+                admin_balance = run_query(select(Users.balance).where(Users.is_admin==True))[0]['balance']+z['sum_1']
                 for x in run_query(select(Carts,Products.image,Products.price,Products.title).filter(Products.id==Carts.product_id).where(Carts.user_id==current_user)):
                     products_result.append({"id":x['id'],"details":{"quantity":x["quantity"],"size":x["size"]},"price":x["price"],"image":x["image"],"name":x["title"]})
                 run_query(insert(Orders).values(products=products_result,id=uuid.uuid4(),user_id=current_user,shipping_method=method,shipping_address=address,total_price=format(z['sum_1']),create_at=format_datetime(),create_by=user_name),True)
                 run_query(update(Users).values(balance=result_balance).where(Users.id==current_user),True)
+                run_query(update(Users).values(balance=admin_balance).where(Users.is_admin==True),True)
                 run_query(delete(Carts).where(Carts.user_id==current_user),True)
         
         elif method == "next day":
@@ -58,10 +60,12 @@ def create_order(current_user):
             else:
                 products_result=[]
                 result_balance = run_query(select(Users.balance).where(Users.id==current_user))[0]['balance']-price_all
+                admin_balance = run_query(select(Users.balance).where(Users.is_admin==True))[0]['balance']+z['sum_1']
                 for x in run_query(select(Carts,Products.image,Products.price,Products.title).filter(Products.id==Carts.product_id).where(Carts.user_id==current_user)):
                     products_result.append({"id":x['id'],"details":{"quantity":x["quantity"],"size":x["size"]},"price":x["price"],"image":x["image"],"name":x["title"]})
                 run_query(insert(Orders).values(products=products_result,id=uuid.uuid4(),user_id=current_user,shipping_method=method,shipping_address=address,total_price=format(z['sum_1']),create_at=format_datetime(),create_by=user_name),True)
                 run_query(update(Users).values(balance=result_balance).where(Users.id==current_user),True)
+                run_query(update(Users).values(balance=admin_balance).where(Users.is_admin==True),True)
                 run_query(delete(Carts).where(Carts.user_id==current_user),True)
                     
     return success_message(200,"order success")
@@ -74,7 +78,7 @@ def get_orders(current_user):
         total_all = 0
         for z in run_query(select(Orders).where(Orders.user_id==x['id']).group_by(Orders.id)):
             order_id = z['id']
-            create_at = z['create_at']
+            create_at = z['create_at'].split(' / ')[0]
             total = 0
             for a in z['products']:
                 total += int(a['price']*a['details']['quantity'])
